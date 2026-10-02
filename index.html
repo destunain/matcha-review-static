@@ -4,13 +4,16 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Matcha Mood Meter</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
   *{box-sizing:border-box}
   body{
     margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
     background:linear-gradient(165deg,#2d6a4f 0%,#1b4332 45%,#081c15 100%);
-    font-family:'Segoe UI',Arial,sans-serif;padding:24px;color:#f2e8d5;
-    position:relative;overflow-x:hidden;
+    font-family:'Plus Jakarta Sans','Segoe UI',Arial,sans-serif;
+    padding:24px;color:#f2e8d5;position:relative;overflow-x:hidden;
   }
   .glow{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0}
   .glow-1{width:340px;height:340px;background:rgba(217,160,102,.22);top:-80px;right:-80px}
@@ -20,26 +23,34 @@
     position:relative;z-index:1;
     background:linear-gradient(160deg,#1b4332,#0d2b1f);
     border:1px solid rgba(242,232,213,.14);
-    border-radius:28px;padding:30px 26px;max-width:520px;width:100%;
+    border-radius:28px;padding:32px 26px;max-width:520px;width:100%;
     box-shadow:0 30px 60px rgba(0,0,0,.45);
   }
   .badge{
     display:inline-block;background:rgba(217,160,102,.15);color:#e5c08f;
-    padding:6px 14px;border-radius:999px;font-size:.78rem;font-weight:700;
-    letter-spacing:.06em;margin-bottom:12px;border:1px solid rgba(217,160,102,.35);
+    padding:6px 14px;border-radius:999px;font-size:.75rem;font-weight:700;
+    letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px;
+    border:1px solid rgba(217,160,102,.35);
   }
-  h1{margin:0 0 6px;font-size:1.55rem;color:#f5efe0;letter-spacing:.01em}
-  p.sub{margin:0 0 22px;color:rgba(242,232,213,.72);font-size:.93rem;line-height:1.55}
+  h1{
+    margin:0 0 8px;font-size:1.9rem;color:#f5efe0;
+    font-family:'Fraunces',Georgia,serif;font-weight:600;line-height:1.15;
+  }
+  p.sub{margin:0 0 22px;color:rgba(242,232,213,.72);font-size:.93rem;line-height:1.6}
 
-  label{display:block;font-weight:700;margin:16px 0 7px;color:#e5c08f;font-size:.92rem}
+  label{display:block;font-weight:700;margin:16px 0 7px;color:#e5c08f;font-size:.9rem}
   .emoji-group{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
   .emoji-btn{
     background:linear-gradient(160deg,#2d6a4f,#1b4332);
     border:1px solid rgba(242,232,213,.18);border-radius:18px;
-    padding:13px 4px;cursor:pointer;text-align:center;font-size:1.55rem;line-height:1.15;
+    padding:14px 4px 12px;cursor:pointer;text-align:center;
     box-shadow:0 12px 24px rgba(0,0,0,.35);transition:.15s;color:#f2e8d5;
   }
-  .emoji-btn small{display:block;font-size:.66rem;font-weight:700;color:rgba(242,232,213,.85);margin-top:5px}
+  .emo{
+    width:46px;height:46px;object-fit:contain;display:block;margin:0 auto 7px;
+    filter:drop-shadow(0 6px 12px rgba(0,0,0,.35));
+  }
+  .emoji-btn small{display:block;font-size:.66rem;font-weight:700;color:rgba(242,232,213,.85)}
   .emoji-btn:hover{transform:translateY(-2px)}
   .emoji-btn.selected{
     background:linear-gradient(160deg,#b08968,#8f5b34);
@@ -76,9 +87,15 @@
     padding:38px 34px;text-align:center;max-width:340px;width:100%;
     box-shadow:0 30px 60px rgba(0,0,0,.5);animation:pop .35s ease;
   }
-  .popup-emoji{font-size:4.2rem;line-height:1;animation:bounce .6s ease}
-  .popup h2{margin:14px 0 6px;color:#f5efe0;font-size:1.5rem}
-  .popup p{margin:0;color:rgba(242,232,213,.75);font-size:.92rem;line-height:1.5}
+  .popup-emoji{
+    width:88px;height:88px;object-fit:contain;display:block;margin:0 auto;
+    animation:bounce .6s ease;filter:drop-shadow(0 10px 20px rgba(0,0,0,.4));
+  }
+  .popup h2{
+    margin:16px 0 6px;color:#f5efe0;font-size:1.7rem;
+    font-family:'Fraunces',Georgia,serif;font-weight:600;
+  }
+  .popup p{margin:0;color:rgba(242,232,213,.75);font-size:.92rem;line-height:1.55}
   @keyframes pop{from{transform:scale(.7);opacity:0}}
   @keyframes bounce{0%{transform:scale(.4)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
 </style>
@@ -88,17 +105,29 @@
 <div class="glow glow-2"></div>
 
 <main class="card">
-  <span class="badge">🍵 RENNALE RENUELLY</span>
+  <span class="badge">🍵 Rennale Renuelly</span>
   <h1>Scan, pilih emoji, jujur aja!</h1>
   <p class="sub">Satu klik kecilmu bikin Matcha Drink + Pudding kami makin pas rasanya.</p>
 
   <form id="reviewForm">
     <label>Ekspresi kamu setelah cobain:</label>
     <div class="emoji-group">
-      <div class="emoji-btn" data-emosi="bahagia_banget" data-char="😆">😆<small>Enak banget!</small></div>
-      <div class="emoji-btn" data-emosi="bahagia" data-char="😊">😊<small>Enak</small></div>
-      <div class="emoji-btn" data-emosi="kurang" data-char="😕">😕<small>Kurang</small></div>
-      <div class="emoji-btn" data-emosi="ga_cocok" data-char="😞">😞<small>Ga cocok</small></div>
+      <div class="emoji-btn" data-emosi="bahagia_banget" data-char="😆">
+        <img class="emo" src="https://emojicdn.elk.sh/😆?style=apple" alt="Enak banget">
+        <small>Enak banget!</small>
+      </div>
+      <div class="emoji-btn" data-emosi="bahagia" data-char="😊">
+        <img class="emo" src="https://emojicdn.elk.sh/😊?style=apple" alt="Enak">
+        <small>Enak</small>
+      </div>
+      <div class="emoji-btn" data-emosi="kurang" data-char="😕">
+        <img class="emo" src="https://emojicdn.elk.sh/😕?style=apple" alt="Kurang">
+        <small>Kurang</small>
+      </div>
+      <div class="emoji-btn" data-emosi="ga_cocok" data-char="😞">
+        <img class="emo" src="https://emojicdn.elk.sh/😞?style=apple" alt="Ga cocok">
+        <small>Ga cocok</small>
+      </div>
     </div>
     <input type="hidden" name="emosi" id="emosiInput" required>
 
@@ -124,9 +153,9 @@
 
 <div class="overlay" id="overlay">
   <div class="popup">
-    <div class="popup-emoji" id="popupEmoji">😆</div>
+    <img class="popup-emoji" id="popupEmoji" src="https://emojicdn.elk.sh/🍵?style=apple" alt="Makasih">
     <h2>Makasih ya!</h2>
-    <p>Ulasanmu udah masuk dan bikin matcha kami makin glow up. 🍵✨</p>
+    <p>Ulasanmu udah masuk dan bikin matcha kami makin glow up. ✨</p>
   </div>
 </div>
 
@@ -144,10 +173,9 @@
   });
 
   var overlay = document.getElementById('overlay');
-  function showPopup(char, title, msg, ok){
-    document.getElementById('popupEmoji').textContent = char;
-    document.querySelector('.popup h2').textContent = title;
-    document.querySelector('.popup p').textContent = msg;
+  function showPopup(char, ok){
+    document.getElementById('popupEmoji').src =
+      'https://emojicdn.elk.sh/' + encodeURIComponent(char || '🍵') + '?style=apple';
     overlay.classList.add('show');
     if (ok) setTimeout(function(){ overlay.classList.remove('show'); }, 3200);
   }
@@ -168,7 +196,7 @@
 
     fetch(SCRIPT_URL, { method: 'POST', body: body, mode: 'no-cors' })
       .then(function(){
-        showPopup(selectedChar || '🍵', 'Makasih ya!', 'Ulasanmu udah masuk dan bikin matcha kami makin glow up. 🍵✨', true);
+        showPopup(selectedChar || '🍵', true);
         e.target.reset();
         document.querySelectorAll('.emoji-btn').forEach(function(b){ b.classList.remove('selected'); });
         selectedChar = '';
