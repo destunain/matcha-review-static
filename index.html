@@ -1,100 +1,116 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ulasan Matcha</title>
-    <style>
-        body { font-family: 'Segoe UI', sans-serif; background: #f0fdf4; color: #14532d; padding: 20px; display: flex; justify-content: center; }
-        .container { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); max-width: 500px; width: 100%; }
-        h1 { text-align: center; color: #15803d; }
-        label { display: block; margin-top: 15px; font-weight: bold; }
-        input, select, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #bbf7d0; border-radius: 8px; box-sizing: border-box; }
-        button { width: 100%; background: #15803d; color: white; padding: 12px; border: none; border-radius: 8px; margin-top: 20px; cursor: pointer; font-size: 16px; font-weight: bold; }
-        button:hover { background: #166534; }
-        .emoji-group { display: flex; gap: 10px; margin-top: 10px; }
-        .emoji-btn { flex: 1; padding: 10px; border: 2px solid #bbf7d0; border-radius: 8px; background: white; cursor: pointer; text-align: center; }
-        .emoji-btn.selected { background: #dcfce7; border-color: #15803d; }
-        #status { text-align: center; margin-top: 15px; font-weight: bold; display: none; }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matcha Mood Meter</title>
+<style>
+  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+       background:linear-gradient(180deg,#eef9f0,#d7efe0);font-family:'Segoe UI',Arial,sans-serif;padding:24px;color:#173b2a}
+  .card{background:#fff;border-radius:24px;padding:28px;max-width:520px;width:100%;
+        box-shadow:0 18px 50px rgba(31,87,56,.15)}
+  h1{color:#1f5738;margin:0 0 6px;font-size:1.6rem}
+  p.sub{color:#42695a;margin:0 0 20px;font-size:.95rem}
+  label{display:block;font-weight:700;margin:14px 0 6px;color:#204d37}
+  .emoji-group{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+  .emoji-btn{border:2px solid #cde7d6;background:#f7fff9;border-radius:16px;padding:12px 4px;
+             cursor:pointer;text-align:center;font-size:1.5rem;line-height:1.2}
+  .emoji-btn small{display:block;font-size:.7rem;font-weight:700;color:#275d3d;margin-top:4px}
+  .emoji-btn.selected{border-color:#3e8e5a;background:#eaf9ef;transform:translateY(-2px)}
+  input,select,textarea{width:100%;box-sizing:border-box;border:2px solid #cfe6d8;border-radius:12px;
+                        padding:11px;font:inherit;background:#fff}
+  button{width:100%;margin-top:20px;border:0;border-radius:14px;padding:14px;font:inherit;font-weight:800;
+         background:linear-gradient(135deg,#3e8e5a,#1f5738);color:#fff;cursor:pointer}
+  #status{display:none;margin-top:14px;text-align:center;font-weight:700}
+</style>
 </head>
 <body>
-    <div class="container">
-        <h1>🍵 Matcha Mood Meter</h1>
-        <form id="reviewForm">
-            <label>Ekspresi Kamu:</label>
-            <div class="emoji-group">
-                <div class="emoji-btn" onclick="selectEmoji(this, 'bahagia_banget')">😆<br>Bahagia Banget</div>
-                <div class="emoji-btn" onclick="selectEmoji(this, 'bahagia')">😊<br>Bahagia</div>
-                <div class="emoji-btn" onclick="selectEmoji(this, 'biasa_aja')">😕<br>Biasa Aja</div>
-                <div class="emoji-btn" onclick="selectEmoji(this, 'ga_bahagia')">😞<br>Ga Bahagia</div>
-            </div>
-            <input type="hidden" name="emosi" id="emosiInput" required>
+<main class="card">
+  <h1>🍵 Matcha Mood Meter</h1>
+  <p class="sub">Scan, pilih emoji, jujur aja. Satu klik kecilmu berarti banget.</p>
 
-            <label>Nama:</label>
-            <input type="text" name="nama" required>
-
-            <label>Produk:</label>
-            <select name="produk">
-                <option value="Matcha Pudding">Matcha Pudding</option>
-                <option value="Matcha Drink">Matcha Drink</option>
-            </select>
-
-            <label>Catatan Rasa:</label>
-            <select name="catatan_rasa">
-                <option value="Pas">Pas</option>
-                <option value="Terlalu Manis">Terlalu Manis</option>
-                <option value="Terlalu Pahit">Terlalu Pahit</option>
-                <option value="Terlalu Enak">Terlalu Enak</option>
-            </select>
-
-            <label>Ulasan:</label>
-            <textarea name="ulasan" rows="3"></textarea>
-
-            <label>Saran:</label>
-            <textarea name="saran" rows="2"></textarea>
-
-            <button type="submit" id="submitBtn">Kirim Ulasan</button>
-            <div id="status"></div>
-        </form>
+  <form id="reviewForm">
+    <label>Ekspresi kamu setelah cobain:</label>
+    <div class="emoji-group">
+      <div class="emoji-btn" data-emosi="bahagia_banget">😆<small>Enak banget!</small></div>
+      <div class="emoji-btn" data-emosi="bahagia">😊<small>Enak</small></div>
+      <div class="emoji-btn" data-emosi="kurang">😕<small>Kurang</small></div>
+      <div class="emoji-btn" data-emosi="ga_cocok">😞<small>Ga cocok</small></div>
     </div>
+    <input type="hidden" name="emosi" id="emosiInput" required>
 
-    <script>
-        // GANTI URL INI DENGAN URL APPS SCRIPT LU
-        const scriptURL = 'PASTE_URL_APPS_SCRIPT_LU_DISINI'; 
+    <label for="nama">Nama (wajib):</label>
+    <input id="nama" name="nama" placeholder="contoh: Dinda" required>
 
-        function selectEmoji(element, value) {
-            document.querySelectorAll('.emoji-btn').forEach(btn => btn.classList.remove('selected'));
-            element.classList.add('selected');
-            document.getElementById('emosiInput').value = value;
-        }
+    <label for="produk">Produk:</label>
+    <select id="produk" name="produk">
+      <option>Matcha Pudding</option>
+      <option>Matcha Drink</option>
+    </select>
 
-        const form = document.getElementById('reviewForm');
-        const statusDiv = document.getElementById('status');
-        const btn = document.getElementById('submitBtn');
+    <label for="catatan_rasa">Catatan rasa:</label>
+    <select id="catatan_rasa" name="catatan_rasa">
+      <option>Pas</option>
+      <option>Terlalu manis</option>
+      <option>Terlalu pahit</option>
+      <option>Terlalu enak</option>
+      <option>Kurang matcha</option>
+    </select>
 
-        form.addEventListener('submit', e => {
-            e.preventDefault();
-            btn.disabled = true;
-            btn.innerText = 'Mengirim...';
-            
-            fetch(scriptURL, { method: 'POST', body: new FormData(form), mode: 'no-cors' })
-                .then(response => {
-                    statusDiv.style.display = 'block';
-                    statusDiv.innerText = '✅ Makasih! Ulasanmu udah masuk.';
-                    statusDiv.style.color = 'green';
-                    form.reset();
-                    document.querySelectorAll('.emoji-btn').forEach(btn => btn.classList.remove('selected'));
-                    btn.disabled = false;
-                    btn.innerText = 'Kirim Ulasan';
-                })
-                .catch(error => {
-                    statusDiv.style.display = 'block';
-                    statusDiv.innerText = '❌ Gagal mengirim. Coba lagi.';
-                    statusDiv.style.color = 'red';
-                    btn.disabled = false;
-                });
-        });
-    </script>
+    <label for="ulasan">Ulasan (opsional):</label>
+    <textarea id="ulasan" name="ulasan" rows="3" placeholder="Rasanya gimana?"></textarea>
+
+    <label for="saran">Saran (opsional):</label>
+    <textarea id="saran" name="saran" rows="2" placeholder="Bikin varian less sweet dong..."></textarea>
+
+    <button type="submit" id="submitBtn">Kirim mood matcha-ku 🍵</button>
+    <div id="status"></div>
+  </form>
+</main>
+
+<script>
+  // ⚠️ GANTI DENGAN URL /exec APPS SCRIPT LU
+  var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzpzZzYbAmtBy8CvE_vQ5SADFP-uC_vw6-q4nnYHKaILy0F5prU7knJaGpxjRcOAoI/exec';
+
+  document.querySelectorAll('.emoji-btn').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      document.querySelectorAll('.emoji-btn').forEach(function(b){ b.classList.remove('selected'); });
+      btn.classList.add('selected');
+      document.getElementById('emosiInput').value = btn.dataset.emosi;
+    });
+  });
+
+  document.getElementById('reviewForm').addEventListener('submit', function(e){
+    e.preventDefault();
+    if (!document.getElementById('emosiInput').value) {
+      alert('Pilih salah satu emoji dulu ya!');
+      return;
+    }
+    var btn = document.getElementById('submitBtn');
+    var status = document.getElementById('status');
+    btn.disabled = true;
+    btn.innerText = 'Mengirim...';
+
+    // TRIK KUNCI: URLSearchParams (bukan FormData) biar Google bisa baca
+    var body = new URLSearchParams(new FormData(e.target));
+
+    fetch(SCRIPT_URL, { method: 'POST', body: body, mode: 'no-cors' })
+      .then(function(){
+        status.style.display = 'block';
+        status.style.color = '#1f5738';
+        status.innerText = '✅ Makasih! Ulasanmu udah masuk.';
+        e.target.reset();
+        document.querySelectorAll('.emoji-btn').forEach(function(b){ b.classList.remove('selected'); });
+        btn.disabled = false;
+        btn.innerText = 'Kirim mood matcha-ku 🍵';
+      })
+      .catch(function(){
+        status.style.display = 'block';
+        status.style.color = '#c22f2f';
+        status.innerText = '❌ Gagal mengirim, coba lagi ya.';
+        btn.disabled = false;
+      });
+  });
+</script>
 </body>
 </html>
