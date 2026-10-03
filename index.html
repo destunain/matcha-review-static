@@ -57,14 +57,27 @@
     border-color:#e5c08f;transform:translateY(-3px);
     box-shadow:0 16px 32px rgba(217,160,102,.35);
   }
-  input,select,textarea{
+  input,textarea{
     width:100%;border:1px solid rgba(242,232,213,.28);border-radius:14px;
     padding:12px;font:inherit;background:rgba(255,255,255,.06);color:#f2e8d5;
   }
-  select option{color:#1b1b1b;background:#f2e8d5}
   input::placeholder,textarea::placeholder{color:rgba(242,232,213,.45)}
-  input:focus,select:focus,textarea:focus{outline:none;border-color:#d9a066}
+  input:focus,textarea:focus{outline:none;border-color:#d9a066}
   textarea{resize:vertical}
+
+  .chips{display:flex;flex-wrap:wrap;gap:8px}
+  .chip input{position:absolute;opacity:0;pointer-events:none}
+  .chip span{
+    display:inline-block;padding:9px 15px;border-radius:999px;
+    border:1px solid rgba(242,232,213,.28);background:rgba(255,255,255,.06);
+    color:rgba(242,232,213,.85);font-size:.82rem;font-weight:600;
+    cursor:pointer;transition:.15s;
+  }
+  .chip span:hover{border-color:#d9a066}
+  .chip input:checked + span{
+    background:linear-gradient(135deg,#d9a066,#a5673f);color:#fff8ec;
+    border-color:transparent;box-shadow:0 10px 20px rgba(217,160,102,.3);
+  }
 
   button{
     width:100%;margin-top:22px;border:0;border-radius:16px;padding:15px;
@@ -134,14 +147,14 @@
     <label for="nama">Nama (wajib):</label>
     <input id="nama" name="nama" placeholder="contoh: Dinda" required>
 
-    <label for="catatan_rasa">Ulasan (pilih yang paling pas):</label>
-    <select id="catatan_rasa" name="catatan_rasa">
-      <option>Pas</option>
-      <option>Terlalu manis</option>
-      <option>Terlalu pahit</option>
-      <option>Terlalu enak</option>
-      <option>Kurang matcha</option>
-    </select>
+    <label>Ulasan (pilih yang paling pas):</label>
+    <div class="chips">
+      <label class="chip"><input type="radio" name="catatan_rasa" value="Pas" checked><span>Pas</span></label>
+      <label class="chip"><input type="radio" name="catatan_rasa" value="Terlalu manis"><span>Terlalu manis</span></label>
+      <label class="chip"><input type="radio" name="catatan_rasa" value="Terlalu pahit"><span>Terlalu pahit</span></label>
+      <label class="chip"><input type="radio" name="catatan_rasa" value="Terlalu enak"><span>Terlalu enak</span></label>
+      <label class="chip"><input type="radio" name="catatan_rasa" value="Kurang matcha"><span>Kurang matcha</span></label>
+    </div>
 
     <label for="saran">Saran (opsional):</label>
     <textarea id="saran" name="saran" rows="2" placeholder="Bikin varian less sweet dong..."></textarea>
@@ -199,6 +212,7 @@
         showPopup(selectedChar || '🍵', true);
         e.target.reset();
         document.querySelectorAll('.emoji-btn').forEach(function(b){ b.classList.remove('selected'); });
+        document.querySelector('.chip input').checked = true;
         selectedChar = '';
         status.style.display = 'none';
         btn.disabled = false;
