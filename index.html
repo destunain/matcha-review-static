@@ -8,223 +8,244 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
-  *{box-sizing:border-box}
-  body{
-    margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
-    background:linear-gradient(165deg,#2d6a4f 0%,#1b4332 45%,#081c15 100%);
-    font-family:'Plus Jakarta Sans','Segoe UI',Arial,sans-serif;
-    padding:24px;color:#f2e8d5;position:relative;overflow-x:hidden;
-  }
-  .glow{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0}
-  .glow-1{width:340px;height:340px;background:rgba(217,160,102,.22);top:-80px;right:-80px}
-  .glow-2{width:300px;height:300px;background:rgba(64,145,108,.35);bottom:-60px;left:-60px}
-
-  .card{
-    position:relative;z-index:1;
-    background:linear-gradient(160deg,#1b4332,#0d2b1f);
-    border:1px solid rgba(242,232,213,.14);
-    border-radius:28px;padding:32px 26px;max-width:520px;width:100%;
-    box-shadow:0 30px 60px rgba(0,0,0,.45);
-  }
-  .badge{
-    display:inline-block;background:rgba(217,160,102,.15);color:#e5c08f;
-    padding:6px 14px;border-radius:999px;font-size:.75rem;font-weight:700;
-    letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px;
-    border:1px solid rgba(217,160,102,.35);
-  }
-  h1{
-    margin:0 0 8px;font-size:1.9rem;color:#f5efe0;
-    font-family:'Fraunces',Georgia,serif;font-weight:600;line-height:1.15;
-  }
-  p.sub{margin:0 0 22px;color:rgba(242,232,213,.72);font-size:.93rem;line-height:1.6}
-
-  label{display:block;font-weight:700;margin:16px 0 7px;color:#e5c08f;font-size:.9rem}
-  .emoji-group{display:grid;grid-template-columns:repeat(4,1fr);gap:9px}
-  .emoji-btn{
-    background:linear-gradient(160deg,#2d6a4f,#1b4332);
-    border:1px solid rgba(242,232,213,.18);border-radius:18px;
-    padding:14px 4px 12px;cursor:pointer;text-align:center;
-    box-shadow:0 12px 24px rgba(0,0,0,.35);transition:.15s;color:#f2e8d5;
-  }
-  .emo{
-    width:46px;height:46px;object-fit:contain;display:block;margin:0 auto 7px;
-    filter:drop-shadow(0 6px 12px rgba(0,0,0,.35));
-  }
-  .emoji-btn small{display:block;font-size:.66rem;font-weight:700;color:rgba(242,232,213,.85)}
-  .emoji-btn:hover{transform:translateY(-2px)}
-  .emoji-btn.selected{
-    background:linear-gradient(160deg,#b08968,#8f5b34);
-    border-color:#e5c08f;transform:translateY(-3px);
-    box-shadow:0 16px 32px rgba(217,160,102,.35);
-  }
-  input,textarea{
-    width:100%;border:1px solid rgba(242,232,213,.28);border-radius:14px;
-    padding:12px;font:inherit;background:rgba(255,255,255,.06);color:#f2e8d5;
-  }
-  input::placeholder,textarea::placeholder{color:rgba(242,232,213,.45)}
-  input:focus,textarea:focus{outline:none;border-color:#d9a066}
-  textarea{resize:vertical}
-
-  .chips{display:flex;flex-wrap:wrap;gap:8px}
-  .chip input{position:absolute;opacity:0;pointer-events:none}
-  .chip span{
-    display:inline-block;padding:9px 15px;border-radius:999px;
-    border:1px solid rgba(242,232,213,.28);background:rgba(255,255,255,.06);
-    color:rgba(242,232,213,.85);font-size:.82rem;font-weight:600;
-    cursor:pointer;transition:.15s;
-  }
-  .chip span:hover{border-color:#d9a066}
-  .chip input:checked + span{
-    background:linear-gradient(135deg,#d9a066,#a5673f);color:#fff8ec;
-    border-color:transparent;box-shadow:0 10px 20px rgba(217,160,102,.3);
-  }
-
-  button{
-    width:100%;margin-top:22px;border:0;border-radius:16px;padding:15px;
-    font:inherit;font-weight:800;letter-spacing:.02em;cursor:pointer;
-    background:linear-gradient(135deg,#d9a066,#a5673f);color:#fff8ec;
-    box-shadow:0 16px 32px rgba(217,160,102,.35);transition:.15s;
-  }
-  button:hover{transform:translateY(-2px)}
-  button:disabled{opacity:.6;transform:none}
-  #status{display:none;margin-top:14px;text-align:center;font-weight:700;color:#ffb4a2}
-
-  .overlay{
-    position:fixed;inset:0;display:none;align-items:center;justify-content:center;
-    background:rgba(4,20,12,.65);backdrop-filter:blur(6px);z-index:50;padding:24px;
-  }
-  .overlay.show{display:flex}
-  .popup{
-    background:linear-gradient(160deg,#1b4332,#0d2b1f);
-    border:1px solid rgba(229,192,143,.4);border-radius:28px;
-    padding:38px 34px;text-align:center;max-width:340px;width:100%;
-    box-shadow:0 30px 60px rgba(0,0,0,.5);animation:pop .35s ease;
-  }
-  .popup-emoji{
-    width:88px;height:88px;object-fit:contain;display:block;margin:0 auto;
-    animation:bounce .6s ease;filter:drop-shadow(0 10px 20px rgba(0,0,0,.4));
-  }
-  .popup h2{
-    margin:16px 0 6px;color:#f5efe0;font-size:1.7rem;
-    font-family:'Fraunces',Georgia,serif;font-weight:600;
-  }
-  .popup p{margin:0;color:rgba(242,232,213,.75);font-size:.92rem;line-height:1.55}
-  @keyframes pop{from{transform:scale(.7);opacity:0}}
-  @keyframes bounce{0%{transform:scale(.4)}60%{transform:scale(1.15)}100%{transform:scale(1)}}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+ background:linear-gradient(180deg,#fbfdf9 0%,#eef5ea 55%,#e2eeda 100%);
+ font-family:'Plus Jakarta Sans','Segoe UI',Arial,sans-serif;
+ padding:24px;color:#1f5738;position:relative;overflow-x:hidden}
+.glow{position:fixed;border-radius:50%;filter:blur(90px);pointer-events:none;z-index:0}
+.g1{width:340px;height:340px;background:rgba(143,191,111,.28);top:-90px;right:-90px}
+.g2{width:300px;height:300px;background:rgba(217,160,102,.16);bottom:-70px;left:-70px}
+.card{position:relative;z-index:1;background:#ffffff;border:1px solid #e3ecdd;border-radius:28px;
+ padding:32px 26px;max-width:520px;width:100%;box-shadow:0 30px 60px rgba(31,87,56,.14)}
+.badge{display:inline-block;background:#eaf5e4;color:#3e7a4e;padding:6px 14px;border-radius:999px;
+ font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
+ border:1px solid #cfe6c6;margin-bottom:12px}
+h1{margin:0 0 6px;font-size:1.75rem;font-family:'Fraunces',Georgia,serif;font-weight:600;color:#1f5738;line-height:1.15}
+p.sub{margin:0 0 22px;color:#6b8f7a;font-size:.92rem;line-height:1.6}
+.step{display:none}
+.step.active{display:block;animation:stepIn .45s ease}
+@keyframes stepIn{from{opacity:0;transform:translateY(14px)}}
+.emoji-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.emoji-btn{background:#f7fbf4;border:1.5px solid #dcead2;border-radius:24px;padding:20px 8px 16px;
+ cursor:pointer;text-align:center;transition:.15s;box-shadow:0 12px 24px rgba(31,87,56,.10)}
+.emoji-btn img{width:74px;height:74px;object-fit:contain;display:block;margin:0 auto 8px;
+ animation:floaty 3s ease-in-out infinite;filter:drop-shadow(0 8px 14px rgba(31,87,56,.18))}
+.emoji-btn:nth-child(2) img{animation-delay:.4s}
+.emoji-btn:nth-child(3) img{animation-delay:.8s}
+.emoji-btn:nth-child(4) img{animation-delay:1.2s}
+.emoji-btn small{font-size:.78rem;font-weight:800;color:#3e7a4e}
+.emoji-btn:hover{transform:translateY(-3px);border-color:#7fb069}
+.emoji-btn:active{transform:scale(.96)}
+@keyframes floaty{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+.bubbles{display:flex;flex-wrap:wrap;gap:12px;justify-content:center;padding:8px 0}
+.bubble{background:#f2f8ec;border:1.5px solid #d5e8c8;color:#2d6a4f;font:inherit;font-weight:700;
+ font-size:.9rem;border-radius:999px;padding:13px 20px;cursor:pointer;transition:.5s;
+ animation:floaty 3.4s ease-in-out infinite;box-shadow:0 8px 18px rgba(31,87,56,.08)}
+.bubble:nth-child(2){animation-delay:.3s}.bubble:nth-child(3){animation-delay:.6s}
+.bubble:nth-child(4){animation-delay:.9s}.bubble:nth-child(5){animation-delay:1.2s}
+.bubble:hover{border-color:#7fb069;transform:translateY(-2px)}
+.bubbles.picked .bubble{animation:none}
+.bubbles.picked .bubble:not(.selected){opacity:0;transform:scale(.3);pointer-events:none}
+.bubbles.picked .bubble.selected{transform:scale(1.12);background:linear-gradient(135deg,#8fbf6f,#4e8a5a);
+ color:#fff;border-color:transparent;box-shadow:0 16px 32px rgba(78,138,90,.35)}
+textarea,input{width:100%;border:1.5px solid #dcead2;border-radius:16px;padding:13px;font:inherit;
+ background:#fbfdf9;color:#1f5738}
+textarea{resize:vertical}
+input::placeholder,textarea::placeholder{color:#9dbba6}
+textarea:focus,input:focus{outline:none;border-color:#7fb069}
+.row{display:flex;gap:10px;margin-top:16px}
+button{border:0;border-radius:16px;padding:14px;font:inherit;font-weight:800;cursor:pointer;transition:.15s}
+.primary{width:100%;background:linear-gradient(135deg,#8fbf6f,#4e8a5a);color:#fff;
+ box-shadow:0 16px 32px rgba(78,138,90,.30)}
+.primary:hover{transform:translateY(-2px)}
+.row .primary{width:auto;flex:1}
+.ghost{flex:1;background:transparent;border:1.5px solid #cfe6c6;color:#4e8a5a}
+.hint{display:none;margin:8px 0 0;font-size:.82rem;font-weight:700;color:#c22f2f}
+#step4 .primary{margin-top:16px}
+.shake{animation:shake .4s ease}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
+.overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;
+ background:rgba(240,247,236,.75);backdrop-filter:blur(8px);z-index:50;padding:24px}
+.overlay.show{display:flex}
+.popup{background:#fff;border:1px solid #cfe6c6;border-radius:28px;padding:38px 32px;text-align:center;
+ max-width:360px;width:100%;box-shadow:0 30px 60px rgba(31,87,56,.20);animation:pop .35s ease}
+.popup-emoji{width:96px;height:96px;object-fit:contain;display:block;margin:0 auto;
+ filter:drop-shadow(0 12px 22px rgba(31,87,56,.25))}
+.popup h2{margin:16px 0 6px;font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:1.5rem;color:#1f5738}
+.popup p{margin:0;color:#6b8f7a;font-size:.92rem;line-height:1.55}
+@keyframes pop{from{transform:scale(.7);opacity:0}}
+.anim-bahagia_banget{animation:jump .7s ease-in-out infinite}
+.anim-bahagia{animation:sway 1.6s ease-in-out infinite}
+.anim-kurang{animation:tilt 1.8s ease-in-out infinite}
+.anim-ga_cocok{animation:droop 2.2s ease-in-out infinite}
+@keyframes jump{0%,100%{transform:translateY(0) scale(1)}40%{transform:translateY(-16px) scale(1.06)}60%{transform:translateY(0) scale(.96)}}
+@keyframes sway{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
+@keyframes tilt{0%,100%{transform:rotate(0)}30%{transform:rotate(-8deg) translateY(-3px)}70%{transform:rotate(8deg)}}
+@keyframes droop{0%,100%{transform:translateY(0)}50%{transform:translateY(6px) rotate(-4deg)}}
 </style>
 </head>
 <body>
-<div class="glow glow-1"></div>
-<div class="glow glow-2"></div>
+<div class="glow g1"></div>
+<div class="glow g2"></div>
 
 <main class="card">
   <span class="badge">🍵 Rennale Renuelly</span>
-  <h1>Scan, pilih emoji, jujur aja!</h1>
-  <p class="sub">Satu klik kecilmu bikin Matcha Drink + Pudding kami makin pas rasanya.</p>
+  <h1 id="stepTitle">Matcha hari ini gimana?</h1>
+  <p class="sub" id="stepSub">Pilih emoji yang paling mirip ekspresi kamu setelah seruputan pertama.</p>
 
-  <form id="reviewForm">
-    <label>Ekspresi kamu setelah cobain:</label>
-    <div class="emoji-group">
-      <div class="emoji-btn" data-emosi="bahagia_banget" data-char="😆">
-        <img class="emo" src="https://emojicdn.elk.sh/😆?style=apple" alt="Enak banget">
-        <small>Enak banget!</small>
-      </div>
-      <div class="emoji-btn" data-emosi="bahagia" data-char="😊">
-        <img class="emo" src="https://emojicdn.elk.sh/😊?style=apple" alt="Enak">
-        <small>Enak</small>
-      </div>
-      <div class="emoji-btn" data-emosi="kurang" data-char="😕">
-        <img class="emo" src="https://emojicdn.elk.sh/😕?style=apple" alt="Kurang">
-        <small>Kurang</small>
-      </div>
-      <div class="emoji-btn" data-emosi="ga_cocok" data-char="😞">
-        <img class="emo" src="https://emojicdn.elk.sh/😞?style=apple" alt="Ga cocok">
-        <small>Ga cocok</small>
-      </div>
+  <section class="step active" id="step1">
+    <div class="emoji-grid">
+      <button type="button" class="emoji-btn" data-emosi="bahagia_banget" data-char="😆"><img src="https://emojicdn.elk.sh/😆?style=apple" alt="Enak banget"><small>Enak banget!</small></button>
+      <button type="button" class="emoji-btn" data-emosi="bahagia" data-char="😊"><img src="https://emojicdn.elk.sh/😊?style=apple" alt="Enak"><small>Enak</small></button>
+      <button type="button" class="emoji-btn" data-emosi="kurang" data-char="😕"><img src="https://emojicdn.elk.sh/😕?style=apple" alt="Kurang"><small>Kurang</small></button>
+      <button type="button" class="emoji-btn" data-emosi="ga_cocok" data-char="😞"><img src="https://emojicdn.elk.sh/😞?style=apple" alt="Ga cocok"><small>Ga cocok</small></button>
     </div>
-    <input type="hidden" name="emosi" id="emosiInput" required>
+  </section>
 
-    <label for="nama">Nama (wajib):</label>
-    <input id="nama" name="nama" placeholder="contoh: Dinda" required>
-
-    <label>Ulasan (pilih yang paling pas):</label>
-    <div class="chips">
-      <label class="chip"><input type="radio" name="catatan_rasa" value="Pas" checked><span>Pas</span></label>
-      <label class="chip"><input type="radio" name="catatan_rasa" value="Terlalu manis"><span>Terlalu manis</span></label>
-      <label class="chip"><input type="radio" name="catatan_rasa" value="Terlalu pahit"><span>Terlalu pahit</span></label>
-      <label class="chip"><input type="radio" name="catatan_rasa" value="Terlalu enak"><span>Terlalu enak</span></label>
-      <label class="chip"><input type="radio" name="catatan_rasa" value="Kurang matcha"><span>Kurang matcha</span></label>
+  <section class="step" id="step2">
+    <div class="bubbles" id="bubbles">
+      <button type="button" class="bubble" data-rasa="Pas">Pas</button>
+      <button type="button" class="bubble" data-rasa="Terlalu manis">Terlalu manis</button>
+      <button type="button" class="bubble" data-rasa="Terlalu pahit">Terlalu pahit</button>
+      <button type="button" class="bubble" data-rasa="Terlalu enak">Terlalu enak</button>
+      <button type="button" class="bubble" data-rasa="Kurang matcha">Kurang matcha</button>
     </div>
+  </section>
 
-    <label for="saran">Saran (opsional):</label>
-    <textarea id="saran" name="saran" rows="2" placeholder="Bikin varian less sweet dong..."></textarea>
+  <section class="step" id="step3">
+    <textarea id="saran" rows="4" placeholder="Tulis di sini... (boleh dikosongkan)"></textarea>
+    <div class="row">
+      <button type="button" class="ghost" id="skipBtn">Lewati</button>
+      <button type="button" class="primary" id="nextBtn">Lanjut</button>
+    </div>
+  </section>
 
-    <button type="submit" id="submitBtn">Kirim mood matcha-ku 🍵</button>
-    <div id="status"></div>
-  </form>
+  <section class="step" id="step4">
+    <input id="nama" placeholder="Nama kamu" autocomplete="name">
+    <p class="hint" id="nameHint">Isi nama dulu ya 🙏</p>
+    <button type="button" class="primary" id="submitBtn">Kirim ulasan 🍵</button>
+  </section>
 </main>
 
 <div class="overlay" id="overlay">
   <div class="popup">
-    <img class="popup-emoji" id="popupEmoji" src="https://emojicdn.elk.sh/🍵?style=apple" alt="Makasih">
-    <h2>Makasih ya!</h2>
-    <p>Ulasanmu udah masuk dan bikin matcha kami makin glow up. ✨</p>
+    <img class="popup-emoji" id="popupEmoji" src="https://emojicdn.elk.sh/🍵?style=apple" alt="">
+    <h2 id="popupTitle"></h2>
+    <p id="popupText"></p>
   </div>
 </div>
 
 <script>
   var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzpzZzYbAmtBy8CvE_vQ5SADFP-uC_vw6-q4nnYHKaILy0F5prU7knJaGpxjRcOAoI/exec';
-  var selectedChar = '';
+  var state = { emosi:'', char:'', rasa:'', saran:'', nama:'' };
+
+  var MOODS = {
+    bahagia_banget: { title:'HOREEE!!', text:'Semangat kamu nular banget, makasih ya! 🎉' },
+    bahagia:        { title:'Hihi, syukaa!', text:'Senyum kamu jadi semangat kami hari ini ☺️' },
+    kurang:         { title:'Yah, maaf ya...', text:'Makasih udah jujur, kami janji perbaiki!' },
+    ga_cocok:       { title:'Hiks, maaf belum cocok...', text:'Masukan kamu berharga banget buat kami 🙏' }
+  };
+  var TITLES = {
+    1: ['Matcha hari ini gimana?', 'Pilih emoji yang paling mirip ekspresi kamu setelah seruputan pertama.'],
+    2: ['Gimana rasanya?', 'Ketuk bubble yang paling sesuai sama lidah kamu.'],
+    3: ['Ada saran atau kritik?', 'Opsional — tapi kata-kata kamu emas buat kami.'],
+    4: ['Terakhir, kamu siapa?', 'Biar kami bisa ucapin makasih secara proper.']
+  };
+
+  function goStep(n){
+    document.querySelectorAll('.step').forEach(function(s){ s.classList.remove('active'); });
+    document.getElementById('step'+n).classList.add('active');
+    document.getElementById('stepTitle').textContent = TITLES[n][0];
+    document.getElementById('stepSub').textContent = TITLES[n][1];
+  }
+
+  var overlayTimer = null;
+  function showOverlay(char, anim, title, text, ms, onDone){
+    var ov = document.getElementById('overlay');
+    var img = document.getElementById('popupEmoji');
+    img.src = 'https://emojicdn.elk.sh/' + encodeURIComponent(char) + '?style=apple';
+    img.className = 'popup-emoji ' + anim;
+    document.getElementById('popupTitle').textContent = title;
+    document.getElementById('popupText').textContent = text;
+    ov.classList.add('show');
+    if (overlayTimer) clearTimeout(overlayTimer);
+    overlayTimer = setTimeout(function(){ closeOverlay(onDone); }, ms);
+    ov.onclick = function(){ closeOverlay(onDone); };
+  }
+  function closeOverlay(onDone){
+    if (overlayTimer) { clearTimeout(overlayTimer); overlayTimer = null; }
+    document.getElementById('overlay').classList.remove('show');
+    if (onDone) onDone();
+  }
 
   document.querySelectorAll('.emoji-btn').forEach(function(btn){
     btn.addEventListener('click', function(){
-      document.querySelectorAll('.emoji-btn').forEach(function(b){ b.classList.remove('selected'); });
-      btn.classList.add('selected');
-      document.getElementById('emosiInput').value = btn.dataset.emosi;
-      selectedChar = btn.dataset.char;
+      state.emosi = btn.dataset.emosi;
+      state.char = btn.dataset.char;
+      var m = MOODS[state.emosi];
+      showOverlay(state.char, 'anim-' + state.emosi, m.title, m.text, 1700, function(){ goStep(2); });
     });
   });
 
-  var overlay = document.getElementById('overlay');
-  function showPopup(char, ok){
-    document.getElementById('popupEmoji').src =
-      'https://emojicdn.elk.sh/' + encodeURIComponent(char || '🍵') + '?style=apple';
-    overlay.classList.add('show');
-    if (ok) setTimeout(function(){ overlay.classList.remove('show'); }, 3200);
-  }
-  overlay.addEventListener('click', function(){ overlay.classList.remove('show'); });
+  document.querySelectorAll('.bubble').forEach(function(b){
+    b.addEventListener('click', function(){
+      var wrap = document.getElementById('bubbles');
+      if (wrap.classList.contains('picked')) return;
+      state.rasa = b.dataset.rasa;
+      b.classList.add('selected');
+      wrap.classList.add('picked');
+      setTimeout(function(){ goStep(3); }, 950);
+    });
+  });
 
-  document.getElementById('reviewForm').addEventListener('submit', function(e){
-    e.preventDefault();
-    if (!document.getElementById('emosiInput').value) {
-      alert('Pilih salah satu emoji dulu ya!');
+  document.getElementById('skipBtn').onclick = function(){ state.saran = ''; goStep(4); };
+  document.getElementById('nextBtn').onclick = function(){
+    state.saran = document.getElementById('saran').value.trim();
+    goStep(4);
+  };
+
+  document.getElementById('submitBtn').onclick = function(){
+    var inp = document.getElementById('nama');
+    var nama = inp.value.trim();
+    if (!nama) {
+      inp.classList.remove('shake'); void inp.offsetWidth; inp.classList.add('shake');
+      document.getElementById('nameHint').style.display = 'block';
       return;
     }
-    var btn = document.getElementById('submitBtn');
-    var status = document.getElementById('status');
-    btn.disabled = true;
-    btn.innerText = 'Mengirim...';
-
-    var body = new URLSearchParams(new FormData(e.target));
-
-    fetch(SCRIPT_URL, { method: 'POST', body: body, mode: 'no-cors' })
+    state.nama = nama;
+    var btn = this;
+    btn.disabled = true; btn.innerText = 'Mengirim...';
+    var body = new URLSearchParams();
+    body.append('nama', state.nama);
+    body.append('emosi', state.emosi);
+    body.append('catatan_rasa', state.rasa);
+    body.append('saran', state.saran);
+    fetch(SCRIPT_URL, { method:'POST', body:body, mode:'no-cors' })
       .then(function(){
-        showPopup(selectedChar || '🍵', true);
-        e.target.reset();
-        document.querySelectorAll('.emoji-btn').forEach(function(b){ b.classList.remove('selected'); });
-        document.querySelector('.chip input').checked = true;
-        selectedChar = '';
-        status.style.display = 'none';
-        btn.disabled = false;
-        btn.innerText = 'Kirim mood matcha-ku 🍵';
+        btn.disabled = false; btn.innerText = 'Kirim ulasan 🍵';
+        showOverlay(state.char, 'anim-' + state.emosi,
+          'Makasih ya, ' + state.nama + '!',
+          'Semoga harimu seenak matcha ini 🍵✨', 4200, resetAll);
       })
       .catch(function(){
-        status.style.display = 'block';
-        status.innerText = '❌ Gagal mengirim, coba lagi ya.';
-        btn.disabled = false;
-        btn.innerText = 'Kirim mood matcha-ku 🍵';
+        btn.disabled = false; btn.innerText = 'Kirim ulasan 🍵';
+        var h = document.getElementById('nameHint');
+        h.textContent = '❌ Gagal mengirim, coba lagi.';
+        h.style.display = 'block';
       });
-  });
+  };
+
+  function resetAll(){
+    state = { emosi:'', char:'', rasa:'', saran:'', nama:'' };
+    document.getElementById('saran').value = '';
+    document.getElementById('nama').value = '';
+    document.getElementById('nameHint').style.display = 'none';
+    var wrap = document.getElementById('bubbles');
+    wrap.classList.remove('picked');
+    document.querySelectorAll('.bubble').forEach(function(b){ b.classList.remove('selected'); });
+    goStep(1);
+  }
 </script>
 </body>
 </html>
