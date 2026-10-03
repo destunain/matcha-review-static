@@ -108,9 +108,9 @@ button{border:0;border-radius:16px;padding:14px;font:inherit;font-weight:800;cur
 <div class="glow g2"></div>
 
 <main class="card">
-  <span class="badge">🍵 Rennale Renuelly</span>
-  <h1 id="stepTitle">Matcha hari ini gimana?</h1>
-  <p class="sub" id="stepSub">Pilih emoji yang paling mirip ekspresi kamu setelah seruputan pertama.</p>
+  <span class="badge">🍵 Pudding Matcha Drink</span>
+  <h1 id="stepTitle">Terima Kasih Sudah Mencoba!! Gimana Rasanya?</h1>
+
 
   <section class="step active" id="step1">
     <div class="emoji-grid">
@@ -163,16 +163,16 @@ button{border:0;border-radius:16px;padding:14px;font:inherit;font-weight:800;cur
   var state = { emosi:'', char:'', rasa:'', saran:'', nama:'' };
 
   var MOODS = {
-    bahagia_banget: { title:'HOREEE!!', text:'Semangat kamu nular banget, makasih ya! 🎉', deco:'spark' },
-    bahagia:        { title:'Hihi, syukaa!', text:'Senyum kamu jadi semangat kami hari ini ☺️', deco:'spark' },
-    kurang:         { title:'Yah, maaf ya...', text:'Makasih udah jujur, kami janji perbaiki!', deco:'apology' },
-    ga_cocok:       { title:'Hiks, maaf belum cocok...', text:'Masukan kamu berharga banget buat kami 🙏', deco:'apology' }
+    bahagia_banget: { title:'HOREEE!!', text:'Semangat kamu nular banget, makasih ya!', deco:'spark' },
+    bahagia:        { title:'Hihi, syukaa!', text:'Senyum kamu jadi semangat kami hari ini', deco:'spark' },
+    kurang:         { title:'Yah, maaf ya...', text:'Terima kasih udah jujur, kami akan perbaiki!', deco:'apology' },
+    ga_cocok:       { title:'Hiks, maaf belum cocok...', text:'Masukan kamu berharga banget buat kami!', deco:'apology' }
   };
   var TITLES = {
     1: ['Matcha hari ini gimana?', 'Pilih emoji yang paling mirip ekspresi kamu setelah seruputan pertama.'],
     2: ['Gimana rasanya?', 'Ketuk bubble yang paling sesuai sama lidah kamu.'],
     3: ['Ada saran atau kritik?', 'Opsional — tapi kata-kata kamu emas buat kami.'],
-    4: ['Terakhir, kamu siapa?', 'Biar kami bisa ucapin makasih secara proper.']
+    4: ['Masukkan Nama kamu Yaa', 'Biar kami bisa ucapin makasih secara proper.']
   };
 
   function goStep(n){
