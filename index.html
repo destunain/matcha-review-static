@@ -23,7 +23,7 @@ body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:c
 .badge{display:inline-block;background:#eaf5e4;color:#3e7a4e;padding:6px 14px;border-radius:999px;
  font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;
  border:1px solid #cfe6c6;margin-bottom:12px}
-h1{margin:0 0 6px;font-size:1.75rem;font-family:'Fraunces',Georgia,serif;font-weight:600;color:#1f5738;line-height:1.15}
+h1{margin:0 0 6px;font-size:1.6rem;font-family:'Fraunces',Georgia,serif;font-weight:600;color:#1f5738;line-height:1.2}
 p.sub{margin:0 0 22px;color:#6b8f7a;font-size:.92rem;line-height:1.6}
 .step{display:none}
 .step.active{display:block;animation:stepIn .45s ease}
@@ -57,6 +57,15 @@ p.sub{margin:0 0 22px;color:#6b8f7a;font-size:.92rem;line-height:1.6}
  transform:scale(1.15);background:linear-gradient(135deg,#8fbf6f,#4e8a5a);
  color:#fff;border-color:transparent;animation:pulse 1.4s ease-in-out infinite}
 @keyframes pulse{0%,100%{box-shadow:0 16px 32px rgba(78,138,90,.35)}50%{box-shadow:0 16px 46px rgba(78,138,90,.6)}}
+.yn-group{margin-bottom:18px}
+.q{margin:0 0 9px;font-weight:800;color:#204d37;font-size:.95rem;line-height:1.45}
+.yn{display:flex;gap:10px}
+.yn-btn{flex:1;background:#f2f8ec;border:1.5px solid #d5e8c8;color:#2d6a4f;font:inherit;
+ font-weight:800;font-size:.95rem;border-radius:16px;padding:13px;cursor:pointer;transition:.15s;
+ box-shadow:0 8px 18px rgba(31,87,56,.08)}
+.yn-btn:hover{border-color:#7fb069;transform:translateY(-2px)}
+.yn-btn.selected{background:linear-gradient(135deg,#8fbf6f,#4e8a5a);color:#fff;border-color:transparent;
+ transform:scale(1.04);box-shadow:0 14px 28px rgba(78,138,90,.35)}
 textarea,input{width:100%;border:1.5px solid #dcead2;border-radius:16px;padding:13px;font:inherit;
  background:#fbfdf9;color:#1f5738}
 textarea{resize:vertical}
@@ -70,7 +79,7 @@ button{border:0;border-radius:16px;padding:14px;font:inherit;font-weight:800;cur
 .row .primary{width:auto;flex:1}
 .ghost{flex:1;background:transparent;border:1.5px solid #cfe6c6;color:#4e8a5a}
 .hint{display:none;margin:8px 0 0;font-size:.82rem;font-weight:700;color:#c22f2f}
-#step4 .primary{margin-top:16px}
+#step5 .primary{margin-top:16px}
 .shake{animation:shake .4s ease}
 @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
 .overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;
@@ -110,7 +119,7 @@ button{border:0;border-radius:16px;padding:14px;font:inherit;font-weight:800;cur
 <main class="card">
   <span class="badge">🍵 Pudding Matcha Drink</span>
   <h1 id="stepTitle">Terima Kasih Sudah Mencoba!! Gimana Rasanya?</h1>
-
+  <p class="sub" id="stepSub">Pilih emoji yang paling mirip ekspresi kamu setelah seruputan pertama.</p>
 
   <section class="step active" id="step1">
     <div class="emoji-grid">
@@ -132,6 +141,23 @@ button{border:0;border-radius:16px;padding:14px;font:inherit;font-weight:800;cur
   </section>
 
   <section class="step" id="step3">
+    <div class="yn-group">
+      <p class="q">Apakah Menurut Kamu Harganya Mahal?</p>
+      <div class="yn">
+        <button type="button" class="yn-btn" data-q="harga" data-v="Ya">Ya</button>
+        <button type="button" class="yn-btn" data-q="harga" data-v="Tidak">Tidak</button>
+      </div>
+    </div>
+    <div class="yn-group">
+      <p class="q">Apakah kamu bersedia membeli lagi?</p>
+      <div class="yn">
+        <button type="button" class="yn-btn" data-q="beli" data-v="Ya">Ya</button>
+        <button type="button" class="yn-btn" data-q="beli" data-v="Tidak">Tidak</button>
+      </div>
+    </div>
+  </section>
+
+  <section class="step" id="step4">
     <textarea id="saran" rows="4" placeholder="Tulis saran atau kritik kamu di sini..."></textarea>
     <p class="hint" id="saranHint">Isi saran dulu ya, atau tekan Lewati 🙏</p>
     <div class="row">
@@ -140,7 +166,7 @@ button{border:0;border-radius:16px;padding:14px;font:inherit;font-weight:800;cur
     </div>
   </section>
 
-  <section class="step" id="step4">
+  <section class="step" id="step5">
     <input id="nama" placeholder="Nama kamu" autocomplete="name">
     <p class="hint" id="nameHint">Isi nama dulu ya 🙏</p>
     <button type="button" class="primary" id="submitBtn">Kirim ulasan 🍵</button>
@@ -160,7 +186,7 @@ button{border:0;border-radius:16px;padding:14px;font:inherit;font-weight:800;cur
 
 <script>
   var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzpzZzYbAmtBy8CvE_vQ5SADFP-uC_vw6-q4nnYHKaILy0F5prU7knJaGpxjRcOAoI/exec';
-  var state = { emosi:'', char:'', rasa:'', saran:'', nama:'' };
+  var state = { emosi:'', char:'', rasa:'', harga:'', beli:'', saran:'', nama:'' };
 
   var MOODS = {
     bahagia_banget: { title:'HOREEE!!', text:'Semangat kamu nular banget, makasih ya!', deco:'spark' },
@@ -169,10 +195,11 @@ button{border:0;border-radius:16px;padding:14px;font:inherit;font-weight:800;cur
     ga_cocok:       { title:'Hiks, maaf belum cocok...', text:'Masukan kamu berharga banget buat kami!', deco:'apology' }
   };
   var TITLES = {
-    1: ['Matcha hari ini gimana?', 'Pilih emoji yang paling mirip ekspresi kamu setelah seruputan pertama.'],
+    1: ['Terima Kasih Sudah Mencoba!! Gimana Rasanya?', 'Pilih emoji yang paling mirip ekspresi kamu setelah seruputan pertama.'],
     2: ['Gimana rasanya?', 'Ketuk bubble yang paling sesuai sama lidah kamu.'],
-    3: ['Ada saran atau kritik?', 'Opsional — tapi kata-kata kamu emas buat kami.'],
-    4: ['Masukkan Nama kamu Yaa', 'Biar kami bisa ucapin makasih secara proper.']
+    3: ['Dua pertanyaan cepat!', 'Jawab jujur ya, ini bantu kami banget.'],
+    4: ['Ada saran atau kritik?', 'Opsional — tapi kata-kata kamu emas buat kami.'],
+    5: ['Masukkan Nama kamu Yaa', 'Biar kami bisa ucapin makasih secara proper.']
   };
 
   function goStep(n){
@@ -241,7 +268,19 @@ button{border:0;border-radius:16px;padding:14px;font:inherit;font-weight:800;cur
     });
   });
 
-  document.getElementById('skipBtn').onclick = function(){ state.saran = ''; goStep(4); };
+  var ynTimer = null;
+  document.querySelectorAll('.yn-btn').forEach(function(b){
+    b.addEventListener('click', function(){
+      state[b.dataset.q] = b.dataset.v;
+      b.parentNode.querySelectorAll('.yn-btn').forEach(function(x){ x.classList.remove('selected'); });
+      b.classList.add('selected');
+      if (state.harga && state.beli && !ynTimer) {
+        ynTimer = setTimeout(function(){ ynTimer = null; goStep(4); }, 800);
+      }
+    });
+  });
+
+  document.getElementById('skipBtn').onclick = function(){ state.saran = ''; goStep(5); };
   document.getElementById('nextBtn').onclick = function(){
     var ta = document.getElementById('saran');
     var val = ta.value.trim();
@@ -251,7 +290,7 @@ button{border:0;border-radius:16px;padding:14px;font:inherit;font-weight:800;cur
       return;
     }
     state.saran = val;
-    goStep(4);
+    goStep(5);
   };
 
   document.getElementById('submitBtn').onclick = function(){
@@ -269,6 +308,8 @@ button{border:0;border-radius:16px;padding:14px;font:inherit;font-weight:800;cur
     body.append('nama', state.nama);
     body.append('emosi', state.emosi);
     body.append('catatan_rasa', state.rasa);
+    body.append('harga_sesuai', state.harga);
+    body.append('beli_lagi', state.beli);
     body.append('saran', state.saran);
     fetch(SCRIPT_URL, { method:'POST', body:body, mode:'no-cors' })
       .then(function(){
@@ -286,7 +327,7 @@ button{border:0;border-radius:16px;padding:14px;font:inherit;font-weight:800;cur
   };
 
   function resetAll(){
-    state = { emosi:'', char:'', rasa:'', saran:'', nama:'' };
+    state = { emosi:'', char:'', rasa:'', harga:'', beli:'', saran:'', nama:'' };
     document.getElementById('saran').value = '';
     document.getElementById('nama').value = '';
     document.getElementById('saranHint').style.display = 'none';
@@ -294,6 +335,7 @@ button{border:0;border-radius:16px;padding:14px;font:inherit;font-weight:800;cur
     var wrap = document.getElementById('bubbles');
     wrap.classList.remove('picked');
     document.querySelectorAll('.bubble').forEach(function(b){ b.classList.remove('selected'); });
+    document.querySelectorAll('.yn-btn').forEach(function(b){ b.classList.remove('selected'); });
     goStep(1);
   }
 </script>
