@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1b4332">
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥭</text></svg>">
+    <title>Mood Matcha Manggo — Pre-Order</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box
+        }
+
+        body {
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(165deg, #2d6a4f 0%, #1b4332 45%, #081c15 100%);
+            font-family: 'Plus Jakarta Sans', 'Segoe UI', Arial, sans-serif;
+            padding: 24px;
+            color: #1f5738;
+            position: relative;
+            overflow-x: hidden
+        }
+
+        .glow {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(90px);
+            pointer-events: none;
+            z-index: 0
+        }
+
+        .g1 {
+            width: 340px;
+            height: 340px;
+            background: rgba(217, 160, 102, .20);
+            top: -90px;
+            right: -90px
+        }
+
+        .g2 {
+            width: 300px;
+            height: 300px;
+            background: rgba(64, 145, 108, .35);
+            bottom: -70px;
+            left: -70px
+        }
+
+        .card {
+            position: relative;
+            z-index: 1;
+            background: linear-gradient(165deg, #ffffff 0%, #f5faf2 55%, #edf6e9 100%);
+            border: 1px solid rgba(255, 255, 255, .55);
+            border-radius: 28px;
+            padding: 32px 26px;
+            max-width: 520px;
+            width: 100%;
+            box-shadow: 0 30px 60px rgba(0, 0, 0, .45)
+        }
+
+        .badge {
+            display: inline-block;
+            background: #eaf5e4;
+            color: #3e7a4e;
+            padding: 6px 14px;
+            border-radius: 999px;
+            font-size: .72rem;
+            font-weight: 800;
+            letter-spacing: .14em;
+            text-transform: uppercase;
+            border: 1px solid #cfe6c6;
+            margin-bottom: 12px
+        }
+
+        h1 {
+            margin: 0 0 6px;
+            font-size: 1.6rem;
+            font-family: 'Fraunces', Georgia, serif;
+            font-weight: 600;
+            color: #1f5738;
+            line-height: 1.2
+        }
+
+        p.sub {
+            margin: 0 0 22px;
+            color: #6b8f7a;
+            font-size: .92rem;
+            line-height: 1.6
+        }
+
+        .view {
+            display: none
+        }
+
+        .view.active {
+            display: block;
+            animation: stepIn .45s ease
+        }
+
+        @keyframes stepIn {
+            from {
+                opacity: 0;
+                transform: translateY(14px)
+            }
+        }
+
+        textarea,
+        input {
+            width: 100%;
+            border: 1.5px solid #dcead2;
+            border-radius: 16px;
+            padding: 13px;
+            font: inherit;
+            background: #fbfdf9;
+            color: #1f5738
+        }
+
+        textarea {
+            resize: vertical
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #9dbba6
+        }
+
+        textarea:focus,
+        input:focus {
+            outline: none;
+            border-color: #7fb069
+        }
+
+        .row {
+            display: flex;
+            gap: 10px;
+            margin-top: 16px
+        }
+
+        button {
+            border: 0;
+            border-radius: 16px;
+            padding: 14px;
+            font: inherit;
+            font-weight: 800;
+            cursor: pointer;
+            transition: .15s
+        }
+
+        .primary {
+            width: 100%;
+            background: linear-gradient(135deg, #8fbf6f, #4e8a5a);
+            color: #fff;
+            box-shadow: 0 16px 32px rgba(78, 138, 90, .30)
+        }
+
+        .primary:hover {
+            transform: translateY(-2px)
+        }
+
+        .primary:disabled {
+            background: #c8d6c8;
+            color: #7d907d;
+            box-shadow: none;
+            cursor: not-allowed;
+            text-decoration: line-through;
+            transform: none
+        }
+
+        .row .primary {
+            width: auto;
+            flex: 1
+        }
+
+        .ghost {
+            flex: 1;
+            background: transparent;
+            border: 1.5px solid #cfe6c6;
+            color: #4e8a5a
+        }
+
+        .hint {
+            display: none;
+            margin: 8px 0 0;
+            font-size: .82rem;
+            font-weight: 700;
+            color: #c22f2f
+        }
+
+        .shake {
+            animation: shake .4s ease
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0)
+            }
+
+            25% {
+                transform: translateX(-7px)
+            }
+
+            75% {
+                transform: translateX(7px)
+            }
+        }
+
+        .story {
+            color: #4c7360;
+            font-size: .93rem;
+            line-height: 1.7;
+            margin: 0 0 18px
+        }
+
+        .price-box {
+            background: #f7fbf4;
+            border: 1.5px dashed #bcd9b0;
+            border-radius: 18px;
+            padding: 16px;
+            text-align: center;
+            margin-bottom: 14px
+        }
+
+        .price-coret {
+            color: #9aa89a;
+            text-decoration: line-through;
+            font-weight: 600;
+            font-size: .95rem
+        }
+
+        .price-aktif {
+            font-family: 'Fraunces', Georgia, serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #1f5738;
+            line-height: 1.1
+        }
+
+        .price-note {
+            font-size: .78rem;
+            font-weight: 700;
+            color: #a5673f;
+            margin-top: 4px
+        }
+
+        .stock-pill {
+            display: inline-block;
+            background: #eaf5e4;
+            border: 1px solid #cfe6c6;
+            color: #3e7a4e;
+            border-radius: 999px;
+            padding: 7px 14px;
+            font-size: .8rem;
+            font-weight: 800;
+            margin-bottom: 12px
+        }
+
+        .stock-pill.habis {
+            background: #fdecea;
+            border: #f5c6c0;
+            color: #c22f2f
+        }
+
+        .po-banner {
+            background: #fff8ec;
+            border: 1px solid #ecd9b0;
+            color: #8f5b34;
+            border-radius: 14px;
+            padding: 11px 14px;
+            font-size: .85rem;
+            font-weight: 700;
+            margin-bottom: 16px;
+            line-height: 1.5
+        }
+
+        .home-foot {
+            margin: 14px 0 0;
+            font-size: .75rem;
+            color: #8aa896;
+            text-align: center
+        }
+
+        .struk {
+            background: #fffdf7;
+            border: 1.5px dashed #bcd9b0;
+            border-radius: 18px;
+            padding: 20px;
+            font-size: .88rem;
+            color: #204d37;
+            line-height: 1.7
+        }
+
+        .struk .kode {
+            font-family: 'Fraunces', Georgia, serif;
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #1f5738;
+            text-align: center;
+            letter-spacing: .04em;
+            margin-bottom: 8px
+        }
+
+        .struk hr {
+            border: 0;
+            border-top: 1.5px dashed #bcd9b0;
+            margin: 10px 0
+        }
+
+        .struk .r {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px
+        }
+
+        .struk .tot {
+            font-weight: 800;
+            font-size: 1rem
+        }
+    </style>
+</head>
+
+<body>
+    <div class="glow g1"></div>
+    <div class="glow g2"></div>
+
+    <main class="card">
+        <section class="view active" id="view-home">
+            <span class="badge">🥭 Mood Matcha Manggo</span>
+            <h1>Matcha ketemu mangga, dalam satu botol bahagia.</h1>
+            <!-- ✏️ EDIT CERITA PRODUK LU DI SINI -->
+            <p class="story">
+                Dibuat tangan tiap pekan kecil-kecilan: vla matcha kental di atas,
+                pudding susu lembut dengan potongan mangga manis di dalamnya.
+                Gak pakai ribet — cuma bahan jujur dan mood yang baik.
+            </p>
+            <div class="price-box">
+                <div class="price-coret" id="priceCoret"></div>
+                <div class="price-aktif" id="priceAktif">Rp—</div>
+                <div class="price-note" id="priceNote"></div>
+            </div>
+            <div class="stock-pill" id="stockPill">Memuat stok...</div>
+            <div class="po-banner" id="poBanner">Memuat jadwal PO...</div>
+            <button type="button" class="primary" id="poBtn" disabled>Pesan Pre-Order 🍵</button>
+            <button type="button" class="ghost" id="trackBtn0" style="margin-top:10px">Cek Status Pesanan 🔎</button>
+            <div class="struk" id="lastOrderBox" style="display:none;margin-top:14px"></div>
+            <p class="home-foot">Pesanan diserahkan pada hari jualan • ulasan via QR di botol</p>
+        </section>
+
+        <section class="view" id="view-po">
+            <span class="badge">🧾 Form Pre-Order</span>
+            <h1>Amankan botolmu!</h1>
+            <p class="sub" id="ambilNote">Pesanan diserahkan pada hari jualan.</p>
+            <input id="poNama" placeholder="Nama lengkap" autocomplete="name">
+            <p class="hint" id="poNamaHint"></p>
+            <input id="poHp" placeholder="Nomor HP (08xx)" inputmode="numeric" style="margin-top:12px">
+            <p class="hint" id="poHpHint"></p>
+            <input id="poJumlah" placeholder="Jumlah botol" inputmode="numeric" style="margin-top:12px">
+            <p class="hint" id="poJumlahHint"></p>
+            <textarea id="poAlamat" rows="3"
+                placeholder="Titik temu + alamat lengkap (contoh: depan minimarket Ketintang, gang 3, rumah pagar hijau)"
+                style="margin-top:12px"></textarea>
+            <p class="hint" id="poAlamatHint"></p>
+            <textarea id="poCatatan" rows="2" placeholder="Catatan tambahan (opsional)"
+                style="margin-top:12px"></textarea>
+            <button type="button" class="primary" id="poSubmit" style="margin-top:16px">Konfirmasi Pesanan ✅</button>
+            <button type="button" class="ghost" id="poBack" style="margin-top:10px">← Kembali</button>
+        </section>
+
+        <section class="view" id="view-receipt">
+            <span class="badge">✅ Pesanan Tercatat</span>
+            <h1>Simpan kode ini ya!</h1>
+            <p class="sub">Tunjukkan kode ini saat konfirmasi WhatsApp & pengambilan.</p>
+            <div class="struk" id="strukBox"></div>
+            <button type="button" class="primary" id="waBtn" style="margin-top:16px">Lanjut ke WhatsApp 💬</button>
+            <div class="row">
+                <button type="button" class="ghost" id="copyBtn">Salin Kode 📋</button>
+                <button type="button" class="ghost" id="homeBtn">Beranda</button>
+            </div>
+        </section>
+
+        <section class="view" id="view-track">
+            <span class="badge">🔎 Cek Status</span>
+            <h1>Lacak pesananmu</h1>
+            <p class="sub">Masukkan kode PO yang kamu simpan saat memesan.</p>
+            <input id="trackKode" placeholder="Contoh: MM-3010-SSS-01" style="text-transform:uppercase">
+            <p class="hint" id="trackHint"></p>
+            <button type="button" class="primary" id="trackBtn" style="margin-top:14px">Cek Status</button>
+            <div class="struk" id="trackBox" style="display:none;margin-top:16px"></div>
+            <button type="button" class="ghost" id="trackBack" style="margin-top:10px">← Kembali ke Beranda</button>
+        </section>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzN1e8DktYFQV2kJ3KSdssE2RugGn8jsPRKxgqygsK76kynir1QMlzVRX4RT3C_16eH/exec';
+            var lastStatus = null;
+            var lastPO = null;
+
+            function $(id) { return document.getElementById(id); }
+            function rupiah(n) { return 'Rp' + Number(n).toLocaleString('id-ID'); }
+            function shakeEl(el) { el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); }
+            function hint(id, msg) { var h = $(id); h.textContent = msg; h.style.display = 'block'; }
+            function hideHint(id) { $(id).style.display = 'none'; }
+            function showView(v) {
+                document.querySelectorAll('.view').forEach(function (x) { x.classList.remove('active'); });
+                $('view-' + v).classList.add('active');
+                if (v === 'home') refreshHome();
+                window.scrollTo(0, 0);
+            }
+
+            function loadStatus() {
+                fetch(SCRIPT_URL + '?action=status')
+                    .then(function (r) { return r.json(); })
+                    .then(function (st) { lastStatus = st; renderHome(st); })
+                    .catch(function () { $('poBanner').textContent = '⚠️ Gagal memuat jadwal. Coba refresh.'; });
+            }
+            function renderHome(st) {
+                if (st.harga_aktif) {
+                    $('priceAktif').textContent = rupiah(st.harga_aktif);
+                    if (st.harga_coret) { $('priceCoret').textContent = rupiah(st.harga_coret); $('priceCoret').style.display = 'block'; }
+                    else $('priceCoret').style.display = 'none';
+                    $('priceNote').textContent = (st.jualan_ke <= 2 && st.harga_coret) ? 'Harga promo jualan perdana! 🎉' : 'Harga normal per botol';
+                } else {
+                    $('priceAktif').textContent = 'Rp—';
+                    $('priceCoret').style.display = 'none';
+                    $('priceNote').textContent = 'Harga segera diumumkan';
+                }
+                var pill = $('stockPill');
+                pill.textContent = st.stok > 0 ? ('Tersisa ' + st.stok + ' botol periode ini') : 'Stok periode ini habis';
+                pill.classList.toggle('habis', st.stok <= 0);
+                var btn = $('poBtn'), banner = $('poBanner');
+                if (st.po === 'OPEN') { btn.disabled = false; banner.textContent = '🟢 PO DIBUKA! Tutup ' + st.tutup_str + '. Jangan sampe kehabisan~'; }
+                else if (st.po === 'BEFORE') { btn.disabled = true; banner.textContent = '⏳ PO belum dibuka. Dibuka ' + st.buka_str + '. Siap-siap ya!'; }
+                else if (st.po === 'CLOSED') { btn.disabled = true; banner.textContent = st.pesan_tutup || 'PO periode ini sudah ditutup. Sampai jumpa di jualan berikutnya!'; }
+                else if (st.po === 'SOLDOUT') { btn.disabled = true; banner.textContent = '😭 Stok periode ini ludes! Sampai jumpa di jualan berikutnya.'; }
+                else { btn.disabled = true; banner.textContent = '📢 Jadwal PO berikutnya segera diumumkan. Pantau terus ya!'; }
+            }
+            function refreshHome() {
+                loadStatus();
+                try {
+                    var k = localStorage.getItem('mm_last_kode');
+                    if (k) fetchTrack(k, 'lastOrderBox', null);
+                    else $('lastOrderBox').style.display = 'none';
+                } catch (e) { }
+            }
+
+            $('poBtn').addEventListener('click', function () {
+                if (!lastStatus || lastStatus.po !== 'OPEN') return;
+                $('ambilNote').textContent = '📦 Pesanan diserahkan pada hari jualan: ' + lastStatus.jualan_str + '.';
+                showView('po');
+            });
+            $('poBack').addEventListener('click', function () { showView('home'); });
+
+            function konsonan(nama) {
+                var s = nama.toUpperCase().replace(/[^A-Z]/g, '').replace(/[AIUEO]/g, '');
+                return (s + 'XXX').slice(0, 3);
+            }
+
+            $('poSubmit').addEventListener('click', function () {
+                var nama = $('poNama').value.trim();
+                var hp = $('poHp').value.trim();
+                var jumlah = parseInt($('poJumlah').value, 10);
+                var alamat = $('poAlamat').value.trim();
+                var ok = true;
+                ['poNamaHint', 'poHpHint', 'poJumlahHint', 'poAlamatHint'].forEach(hideHint);
+                if (!nama) { shakeEl($('poNama')); hint('poNamaHint', 'Nama wajib diisi.'); ok = false; }
+                if (!/^08\d{8,11}$/.test(hp)) { shakeEl($('poHp')); hint('poHpHint', 'Nomor HP tidak valid (contoh: 081234567890).'); ok = false; }
+                if (!jumlah || jumlah < 1) { shakeEl($('poJumlah')); hint('poJumlahHint', 'Minimal 1 botol.'); ok = false; }
+                else if (lastStatus && jumlah > lastStatus.stok) { shakeEl($('poJumlah')); hint('poJumlahHint', 'Maaf, stok tinggal ' + lastStatus.stok + ' botol. Kurangi jumlahnya ya 🙏'); ok = false; }
+                if (alamat.length < 10) { shakeEl($('poAlamat')); hint('poAlamatHint', 'Tulis titik temu + alamat selengkap mungkin biar gampang nemuin kamu.'); ok = false; }
+                if (!ok) return;
+
+                var btn = $('poSubmit');
+                btn.disabled = true; btn.innerText = 'Memproses...';
+
+                fetch(SCRIPT_URL + '?action=count_today').then(function (r) { return r.json(); })
+                    .then(function (res) {
+                        var seq = (res.count || 0) + 1;
+                        var kode = 'MM-' + (lastStatus.jualan_ddmm || '0000') + '-' + konsonan(nama) + '-' + String(seq).padStart(2, '0');
+                        var body = new URLSearchParams();
+                        body.append('type', 'po');
+                        body.append('kode', kode);
+                        body.append('nama', nama);
+                        body.append('hp', hp);
+                        body.append('jumlah', jumlah);
+                        body.append('titik_temu', alamat);
+                        body.append('catatan', $('poCatatan').value.trim());
+
+                        return fetch(SCRIPT_URL, { method: 'POST', body: body })
+                            .then(function (r) { return r.json(); })
+                            .then(function (resp) {
+                                btn.disabled = false; btn.innerText = 'Konfirmasi Pesanan ✅';
+                                if (resp.status !== 'success') {
+                                    shakeEl($('poJumlah'));
+                                    hint('poJumlahHint', '❌ Server: ' + (resp.message || 'gagal simpan'));
+                                    return;
+                                }
+                                var harga = lastStatus.harga_aktif;
+                                lastPO = {
+                                    kode: resp.kode, nama: nama, hp: hp, jumlah: jumlah, harga: harga,
+                                    subtotal: jumlah * harga, total: resp.total, alamat: alamat,
+                                    jualan: lastStatus.jualan_str, wa: lastStatus.wa
+                                };
+                                if (lastStatus) lastStatus.stok = Math.max(0, lastStatus.stok - jumlah);
+                                renderStruk(lastPO);
+                                showView('receipt');
+                            });
+                    })
+                    .catch(function () {
+                        btn.disabled = false; btn.innerText = 'Konfirmasi Pesanan ✅';
+                        hint('poNamaHint', '❌ Gagal memproses, cek koneksi lalu coba lagi.');
+                    });
+            });
+
+            function renderStruk(po) {
+                $('strukBox').innerHTML =
+                    '<div class="kode">' + po.kode + '</div><hr>' +
+                    '<div class="r"><span>Nama</span><span>' + po.nama + '</span></div>' +
+                    '<div class="r"><span>HP</span><span>' + po.hp + '</span></div>' +
+                    '<div class="r"><span>Jumlah</span><span>' + po.jumlah + ' botol</span></div>' +
+                    '<div class="r"><span>Harga</span><span>' + rupiah(po.harga) + ' x ' + po.jumlah + '</span></div>' +
+                    '<div class="r"><span>Subtotal</span><span>' + rupiah(po.subtotal) + '</span></div>' +
+                    '<div class="r"><span>Biaya admin</span><span>' + rupiah(1000) + '</span></div>' +
+                    '<div class="r tot"><span>TOTAL</span><span>' + rupiah(po.total) + '</span></div><hr>' +
+                    '<div class="r"><span>Diambil</span><span>' + po.jualan + '</span></div>' +
+                    '<div class="r"><span>Titik temu</span><span style="text-align:right">' + po.alamat + '</span></div><hr>' +
+                    '<div style="font-size:.8rem;line-height:1.65">' +
+                    '1️⃣ Screenshot / salin kode di atas sebagai bukti pesanan.<br>' +
+                    '2️⃣ Klik "Lanjut ke WhatsApp", kirim pesan + bukti transfer.<br>' +
+                    '3️⃣ Admin konfirmasi → status pesanan jadi LUNAS.<br>' +
+                    '4️⃣ Ambil pesananmu saat hari jualan: <b>' + po.jualan + '</b>.<br>' +
+                    'Cek status kapan pun lewat tombol "Cek Status Pesanan" di beranda.</div>';
+                try { localStorage.setItem('mm_last_kode', po.kode); } catch (err) { }
+                var msg = 'Halo! Aku mau konfirmasi Pre-Order Mood Matcha Manggo\n' +
+                    'Kode PO: ' + po.kode + '\nNama: ' + po.nama + '\nJumlah: ' + po.jumlah + ' botol\n' +
+                    'Total: ' + rupiah(po.total) + '\nTitik temu: ' + po.alamat + '\nMohon info pembayarannya ya, makasih!';
+                $('waBtn').onclick = function () { window.open('https://wa.me/' + po.wa + '?text=' + encodeURIComponent(msg), '_blank'); };
+            }
+
+            $('copyBtn').addEventListener('click', function () {
+                if (!lastPO) return;
+                try { navigator.clipboard.writeText(lastPO.kode).then(function () { alert('Kode disalin: ' + lastPO.kode); }); }
+                catch (e) { alert('Kode kamu: ' + lastPO.kode); }
+            });
+            $('homeBtn').addEventListener('click', function () { showView('home'); });
+
+            function labelStatus(row) {
+                if (row.delivered) return ['🎉 SELESAI / SIAP DIAMBIL', 'Pesanan diserahkan di hari jualan. Makasih ya!'];
+                if (row.paid) return ['✅ LUNAS', 'Pembayaran diterima! Produk masuk produksi, ambil sesuai tanggal ya.'];
+                return ['⏳ MENUNGGU KONFIRMASI', 'Kirim bukti transfer via WhatsApp biar pesananmu diproses.'];
+            }
+            function renderTrack(row, boxId) {
+                var l = labelStatus(row);
+                var box = $(boxId);
+                box.style.display = 'block';
+                box.innerHTML =
+                    '<div class="kode">' + row.kode_po + '</div><hr>' +
+                    '<div class="r"><span>Status</span><span>' + l[0] + '</span></div>' +
+                    '<div class="r"><span>Nama</span><span>' + row.nama + '</span></div>' +
+                    '<div class="r"><span>Jumlah</span><span>' + row.jumlah + ' botol</span></div>' +
+                    '<div class="r"><span>Total</span><span>' + rupiah(row.total) + '</span></div>' +
+                    '<div class="r"><span>Diambil</span><span>' + row.tanggal_ambil + '</span></div>' +
+                    '<hr><div style="font-size:.8rem;line-height:1.65">' + l[1] + '</div>';
+            }
+            function fetchTrack(kode, boxId, hintId) {
+                fetch(SCRIPT_URL + '?action=track&kode=' + encodeURIComponent(kode))
+                    .then(function (r) { return r.json(); })
+                    .then(function (res) {
+                        if (res.found) { if (hintId) hideHint(hintId); renderTrack(res.row, boxId); }
+                        else {
+                            $(boxId).style.display = 'none';
+                            if (hintId) hint(hintId, 'Kode tidak ditemukan. Cek lagi penulisannya ya.');
+                        }
+                    })
+                    .catch(function () { if (hintId) hint(hintId, 'Gagal memuat, cek koneksi.'); });
+            }
+            $('trackBtn').addEventListener('click', function () {
+                var k = $('trackKode').value.trim().toUpperCase();
+                if (!k) { shakeEl($('trackKode')); hint('trackHint', 'Masukkan kode PO dulu.'); return; }
+                fetchTrack(k, 'trackBox', 'trackHint');
+            });
+            $('trackBack').addEventListener('click', function () { showView('home'); });
+            $('trackBtn0').addEventListener('click', function () { $('trackBox').style.display = 'none'; hideHint('trackHint'); showView('track'); });
+
+            showView('home');
+            console.log('[matcha-toko] v1 siap.');
+        });
+    </script>
+</body>
+
+</html>
