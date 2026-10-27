@@ -436,7 +436,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (st === 'HANGUS' || row.hangus) return ['PESANAN HANGUS', 'chip-hangus', 'Maaf pesanan melewati batas konfirmasi tanpa pembayaran. Jika ingin pesan, pesan ulang selama PO dibuka.'];
     if (st === 'DELIVERED' || row.delivered) return ['PESANAN SELESAI', 'chip-done', 'Pesanan sudah diserahkan di hari jualan. Terima kasih!!'];
     if (st === 'PAID' || row.paid) return ['SUDAH TERBAYAR', 'chip-ok', 'Pembayaran diterima. Produk akan diberikan sesuai tanggal dan titik temu.'];
-    return ['MENUNGGU KONFIRMASI', 'chip-wait', 'Kamu belum kirim bukti transfer. Klik "Lanjut ke WhatsApp" di bawah sekarang, atau pesanan hangus saat PO tutup dan slotmu dilepas.'];
+    return ['MENUNGGU KONFIRMASI', 'chip-wait', 'Kamu belum kirim bukti transfer. Klik "Lanjut ke WhatsApp" di bawah sekarang, atau pesanan akan hangus setelah periode PO selesai.'];
   }
 
   function renderTrack(row, boxId){
