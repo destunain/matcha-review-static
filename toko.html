@@ -87,15 +87,12 @@ button{border:0;border-radius:14px;padding:14px;font:inherit;font-weight:800;cur
 .checklist{margin-top:14px;display:flex;flex-direction:column;gap:8px}
 .ck{font-size:.82rem;font-weight:700;color:#9a7a55;background:#fff9ec;border:1px dashed #e8c795;border-radius:10px;padding:9px 12px}
 .ck.done{color:#2d6a4f;border-color:#bcd9b0;background:#eaf5e4;text-decoration:line-through}
-#dbg{position:fixed;left:8px;bottom:8px;z-index:99;max-width:46vw;max-height:38vh;overflow:auto;
- background:#081c15;color:#9fe8b9;font:10px/1.5 monospace;padding:8px 10px;border-radius:10px;
- white-space:pre-wrap;opacity:.92;box-shadow:0 8px 24px rgba(0,0,0,.4)}
 </style>
 </head>
 <body>
 <div class="glow g1"></div>
 <div class="glow g2"></div>
-<pre id="dbg">[dbg] boot...</pre>
+
 
 <main class="card" id="mainCard">
 
@@ -107,17 +104,17 @@ button{border:0;border-radius:14px;padding:14px;font:inherit;font-weight:800;cur
            onerror="this.onerror=null;this.src='https://emojicdn.elk.sh/🥭?style=apple';">
       <p class="hero-text">Mood Matcho atau Mood Matcha Manggo adalah hasil perpaduan vla matcha terbaik dan pudding rasa mangga yang manis dengan susu cream yang segar.</p>
     </div>
-    <p class="softtext">Dibuat dengan hati dan dihidangkan untuk orang yang sedang membutuhkan semangat baru di harinya. Setiap botol diracik kecil-kecilan tiap pekan tanpa pengawet — sederhana, jujur, dan seperlunya saja bikin bahagia.</p>
+    <p class="softtext">Dibuat dengan hati dan dihidangkan untuk orang yang sedang membutuhkan semangat baru di harinya. Buat pesanan kamu dan bahagiakan harimu.</p>
     <button type="button" class="primary closed" id="poBtn" disabled>Memuat jadwal...</button>
     <button type="button" class="ghost slim" id="trackBtn0">Cek Status Pesanan</button>
     <div class="struk" id="lastOrderBox" style="display:none;margin-top:14px"></div>
-    <p class="home-foot">Pesanan diserahkan pada hari jualan • ulasan via QR di botol</p>
+    <p class="home-foot">Jadwal Pre-Order diumumkan melalui Instagram @moodmatcho6. Stay tuned ya!!</p>
   </section>
 
   <!-- ============ LAYAR PO ============ -->
   <section class="view" id="view-po">
     <span class="badge">Pre-Order</span>
-    <h1>Amankan botolmu</h1>
+    <h1>Mood Matcha Manggo</h1>
     <div class="price-line">
       <span class="strike" id="priceCoret" style="display:none"></span>
       <span class="price-aktif" id="priceAktif">Rp—</span>
@@ -188,7 +185,7 @@ document.addEventListener('DOMContentLoaded', function () {
   var trackMode = 'kode';
 
   function $(id){ return document.getElementById(id); }
-  function log(m){ var d = $('dbg'); d.textContent += '\n' + m; d.scrollTop = d.scrollHeight; console.log('[toko]', m); }
+  function log(m){ console.log('[toko]', m); }
   function rupiah(n){ return 'Rp' + Number(n).toLocaleString('id-ID'); }
   function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
   function shakeEl(el){ el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); }
@@ -209,19 +206,24 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   log('SCRIPT_URL = ' + SCRIPT_URL);
-  fetch(SCRIPT_URL + '?action=ping')
-    .then(function(r){ return r.json(); })
+  fetchJson(SCRIPT_URL + '?action=ping')
     .then(function(j){ log('PING ok → ' + j.v + ' | sheet: ' + j.sheet); })
     .catch(function(err){ log('PING GAGAL: ' + err.message); });
 
-  function loadStatus(){
-    fetch(SCRIPT_URL + '?action=status')
-      .then(function(r){ return r.json(); })
+  function fetchJson(url, ms){
+    var c = new AbortController();
+    var t = setTimeout(function(){ c.abort(); }, ms || 12000);
+    return fetch(url, { signal: c.signal })
+      .then(function(r){ clearTimeout(t); return r.json(); });
+  }
+  function loadStatus(retry){
+    fetchJson(SCRIPT_URL + '?action=status')
       .then(function(st){ lastStatus = st; log('STATUS → po=' + st.po + ' stok=' + st.stok); renderAll(st); })
       .catch(function(err){
+        if (!retry) { log('STATUS lambat, coba ulang sekali...'); setTimeout(function(){ loadStatus(true); }, 1500); return; }
         log('STATUS GAGAL: ' + err.message);
         setPoButton('closed', 'Pre-Order Ditutup');
-        $('poBanner2').textContent = 'Jadwal gagal dimuat. Periksa koneksi lalu refresh.';
+        $('poBanner2').textContent = 'Jadwal gagal dimuat. Buka URL script di tab baru sekali untuk memanaskan server, lalu refresh halaman ini.';
         $('poSubmit').disabled = true;
       });
   }
@@ -232,13 +234,13 @@ document.addEventListener('DOMContentLoaded', function () {
       if (st.harga_coret) {
         $('priceCoret').textContent = rupiah(st.harga_coret);
         $('priceCoret').style.display = 'inline-block';
-        $('priceNote').textContent = 'Harga promo jualan perdana';
+        $('priceNote').textContent = 'Harga Promo ';
       } else {
         $('priceCoret').style.display = 'none';
-        $('priceNote').textContent = 'Harga normal per botol';
+        $('priceNote').textContent = 'Harga di atas adalah untuk    per botol';
       }
     } else {
-      $('priceAktif').textContent = 'Rp—';
+      $('priceAktif').textContent = 'Rpxxx';
       $('priceCoret').style.display = 'none';
       $('priceNote').textContent = 'Harga segera diumumkan';
     }
@@ -252,8 +254,8 @@ document.addEventListener('DOMContentLoaded', function () {
     if (st.po === 'OPEN') {
       setPoButton('open', 'Pesan Pre-Order');
       submit.disabled = false;
-      $('poBanner2').textContent = 'PO dibuka sampai ' + st.tutup_str + '. Belum bayar sampai jam itu = pesanan hangus dan slot dilepas.';
-      $('ambilNote').textContent = 'Pesanan diserahkan pada hari jualan: ' + st.jualan_str + '.';
+      $('poBanner2').textContent = 'PO dibuka sampai ' + st.tutup_str;
+      $('ambilNote').textContent = 'Pesanan diserahkan pada hari produktif jualan: ' + st.jualan_str + '.';
     } else if (st.po === 'BEFORE') {
       setPoButton('soon', 'Pre-Order Belum Dibuka');
       submit.disabled = true;
@@ -262,7 +264,7 @@ document.addEventListener('DOMContentLoaded', function () {
     } else {
       setPoButton('closed', 'Pre-Order Ditutup');
       submit.disabled = true;
-      if (st.po === 'SOLDOUT') $('poBanner2').textContent = 'Stok periode ini habis. Sampai jumpa di jualan berikutnya.';
+      if (st.po === 'SOLDOUT') $('poBanner2').textContent = 'Stok week ini habis. Tunggu di week berikutnya ya!.';
       else if (st.po === 'NO_SCHEDULE') $('poBanner2').textContent = 'Jadwal jualan belum diatur. Pantau terus ya.';
       else $('poBanner2').textContent = st.pesan_tutup || 'PO periode ini sudah ditutup.';
       $('ambilNote').textContent = 'Silakan kembali saat PO dibuka.';
@@ -413,9 +415,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function labelStatus(row){
     var st = String(row.status || '').toUpperCase();
-    if (st === 'HANGUS' || row.hangus) return ['HANGUS', 'chip-hangus', 'Pesanan lewat batas konfirmasi tanpa pembayaran, slotnya dilepas ke pembeli lain. Masih mau? Pesan ulang selama PO buka.'];
-    if (st === 'DELIVERED' || row.delivered) return ['SELESAI / DIAMBIL', 'chip-done', 'Pesanan sudah diserahkan di hari jualan. Terima kasih!'];
-    if (st === 'PAID' || row.paid) return ['LUNAS', 'chip-ok', 'Pembayaran diterima. Produk masuk produksi — tinggal ambil sesuai tanggal dan titik temu di atas.'];
+    if (st === 'HANGUS' || row.hangus) return ['PESANAN HANGUS', 'chip-hangus', 'Pesanan lewat batas konfirmasi tanpa pembayaran, slotnya dilepas ke pembeli lain. Masih mau? Pesan ulang selama PO buka.'];
+    if (st === 'DELIVERED' || row.delivered) return ['PESANAN SELESAI', 'chip-done', 'Pesanan sudah diserahkan di hari jualan. Terima kasih!'];
+    if (st === 'PAID' || row.paid) return ['SUDAH TERBAYAR', 'chip-ok', 'Pembayaran diterima. Produk masuk produksi — tinggal ambil sesuai tanggal dan titik temu di atas.'];
     return ['MENUNGGU KONFIRMASI', 'chip-wait', 'Kamu belum kirim bukti transfer. Klik "Lanjut ke WhatsApp" di bawah sekarang, atau pesanan hangus saat PO tutup dan slotmu dilepas.'];
   }
 
