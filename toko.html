@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#3d2a10">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🥭</text></svg>">
+<link rel="icon" href="logomatcho.png">
 <title>Mood Matcha Manggo — Pre-Order</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,12 +24,10 @@ body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:c
 .view{display:none}
 .view.active{display:block;animation:stepIn .45s ease}
 @keyframes stepIn{from{opacity:0;transform:translateY(14px)}}
-/* ---------- tipografi ---------- */
 .script-title{font-family:'Great Vibes',cursive;font-weight:400;font-size:2.7rem;line-height:1.1;
  color:#5b3210;text-align:center;margin:0 0 10px}
 h1{margin:0 0 10px;font-size:1.55rem;font-family:'Fraunces',Georgia,serif;font-weight:700;color:#5b3210;line-height:1.2}
 p.sub{margin:0 0 18px;color:#9a7a55;font-size:.9rem;line-height:1.6}
-/* ---------- beranda ---------- */
 .hero{display:flex;gap:18px;align-items:flex-start;margin-bottom:12px}
 .hero img{width:104px;height:104px;border-radius:50%;object-fit:cover;flex:none;
  box-shadow:0 10px 24px rgba(0,0,0,.25);background:#eaf5e4}
@@ -38,7 +36,6 @@ p.sub{margin:0 0 18px;color:#9a7a55;font-size:.9rem;line-height:1.6}
 .softtext{background:rgba(255,255,255,.42);border-radius:14px;padding:14px 16px;text-align:justify;
  color:#7d5a33;font-size:.92rem;line-height:1.75;margin:0 0 20px}
 .home-foot{margin:16px 0 0;font-size:.75rem;color:#b39b7d;text-align:center}
-/* ---------- layar PO ---------- */
 .po-deadline{text-align:center;font-size:.85rem;font-weight:800;color:#8a4a15;margin:0 0 16px;line-height:1.5}
 .line{border:0;border-top:1px solid rgba(232,199,149,.85);margin:16px 0}
 .po-info{display:flex;justify-content:space-between;align-items:flex-start;gap:16px}
@@ -54,7 +51,6 @@ p.sub{margin:0 0 18px;color:#9a7a55;font-size:.9rem;line-height:1.6}
  padding:7px 16px;font-size:.85rem;font-weight:800}
 .stock-badge.habis{background:#c22f2f}
 .po-note{font-size:.82rem;color:#9a7a55;margin:0 0 18px;line-height:1.55}
-/* ---------- form & tombol ---------- */
 textarea,input{width:100%;border:1.5px solid #ecd3a8;border-radius:14px;padding:13px;font:inherit;
  background:rgba(255,253,248,.9);color:#5b3210;margin-bottom:12px}
 textarea{resize:vertical}
@@ -75,7 +71,6 @@ button{border:0;border-radius:14px;padding:14px;font:inherit;font-weight:800;cur
 .mt10{margin-top:10px}.mt16{margin-top:16px}
 .row{display:flex;gap:10px;margin-top:16px}
 .row .ghost{margin-top:0}
-/* ---------- struk & status ---------- */
 .struk{background:rgba(255,253,247,.85);border:1.5px dashed #e8c795;border-radius:16px;padding:20px;
  font-size:.88rem;color:#5b3210;line-height:1.7}
 .struk .kode{font-family:'Fraunces',Georgia,serif;font-size:1.25rem;font-weight:700;color:#7a3e12;
@@ -107,7 +102,6 @@ button{border:0;border-radius:14px;padding:14px;font:inherit;font-weight:800;cur
 
 <main class="card" id="mainCard">
 
-  <!-- ============ BERANDA ============ -->
   <section class="view active" id="view-home">
     <div class="hero">
       <img id="logoImg" src="logomatcho.png" alt="Logo Mood Matcha Manggo"
@@ -121,7 +115,6 @@ button{border:0;border-radius:14px;padding:14px;font:inherit;font-weight:800;cur
     <p class="home-foot">Pesanan diserahkan pada hari jualan • ulasan via QR di botol</p>
   </section>
 
-  <!-- ============ LAYAR PO ============ -->
   <section class="view" id="view-po">
     <h1 class="script-title">Pre Order</h1>
     <p class="po-deadline" id="poDeadline">Memuat jadwal...</p>
@@ -155,7 +148,6 @@ button{border:0;border-radius:14px;padding:14px;font:inherit;font-weight:800;cur
     <button type="button" class="ghost slim" id="poBack">Kembali</button>
   </section>
 
-  <!-- ============ STRUK ============ -->
   <section class="view" id="view-receipt">
     <h1 class="script-title">Pesanan Tercatat</h1>
     <p class="sub" style="text-align:center">Simpan kode ini. Tunjukkan saat konfirmasi WhatsApp & pengambilan.</p>
@@ -173,7 +165,6 @@ button{border:0;border-radius:14px;padding:14px;font:inherit;font-weight:800;cur
     </div>
   </section>
 
-  <!-- ============ CEK STATUS ============ -->
   <section class="view" id="view-track">
     <h1 class="script-title">Lacak Pesanan</h1>
     <p class="sub" style="text-align:center">Pakai kode PO atau nomor HP yang kamu pakai saat memesan.</p>
@@ -247,7 +238,6 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function renderAll(st){
-    /* harga */
     if (st.harga_aktif) {
       $('priceAktif').textContent = rupiah(st.harga_aktif);
       if (st.harga_coret) {
@@ -263,11 +253,9 @@ document.addEventListener('DOMContentLoaded', function () {
       $('priceCoret').style.display = 'none';
       $('priceNote').textContent = 'Harga segera diumumkan';
     }
-    /* stok */
     var pill = $('stockPill2');
     pill.textContent = st.stok > 0 ? (st.stok + ' botol') : 'Habis';
     pill.classList.toggle('habis', st.stok <= 0);
-    /* deadline + catatan + tombol */
     var submit = $('poSubmit');
     submit.classList.remove('closed', 'soon');
     if (st.po === 'OPEN') {
