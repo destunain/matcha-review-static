@@ -4,11 +4,11 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#1b4332">
-<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🍵</text></svg>">
+<link rel="icon" href="logomatcho.png">
 <title>Ulasan Mood Matcha Manggo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600;9..144,700&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,500;1,9..144,600&family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box}
 body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
@@ -21,9 +21,15 @@ body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:c
 .card{position:relative;z-index:1;background:linear-gradient(165deg,#ffffff 0%,#f5faf2 55%,#edf6e9 100%);
  border:1px solid rgba(255,255,255,.55);border-radius:28px;padding:32px 26px;max-width:520px;width:100%;
  box-shadow:0 30px 60px rgba(0,0,0,.45)}
+/* ---------- brand header ---------- */
+.brand-head{text-align:center;margin-bottom:22px}
+.brand-logo{width:86px;height:86px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 10px;
+ box-shadow:0 14px 30px rgba(31,87,56,.25);background:#eaf5e4;border:3px solid #ffffff}
+.brand-name{font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:600;
+ font-size:1.8rem;color:#1f5738;margin:0;letter-spacing:.01em;line-height:1.1}
 .badge{display:inline-block;background:#eaf5e4;color:#3e7a4e;padding:6px 14px;border-radius:999px;
  font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;border:1px solid #cfe6c6;margin-bottom:12px}
-h1{margin:0 0 6px;font-size:1.6rem;font-family:'Fraunces',Georgia,serif;font-weight:600;color:#1f5738;line-height:1.2}
+h1{margin:0 0 6px;font-size:1.5rem;font-family:'Fraunces',Georgia,serif;font-weight:600;color:#1f5738;line-height:1.2}
 p.sub{margin:0 0 22px;color:#6b8f7a;font-size:.92rem;line-height:1.6}
 .view{display:none}
 .view.active{display:block;animation:stepIn .45s ease}
@@ -84,7 +90,8 @@ button{border:0;border-radius:16px;padding:14px;font:inherit;font-weight:800;cur
 .popup{position:relative;background:linear-gradient(165deg,#ffffff 0%,#f5faf2 60%,#edf6e9 100%);
  border:1px solid #cfe6c6;border-radius:28px;padding:42px 32px 36px;text-align:center;max-width:360px;width:100%;
  box-shadow:0 30px 60px rgba(0,0,0,.5);animation:pop .35s ease}
-.popup-emoji{width:96px;height:96px;object-fit:contain;display:block;margin:0 auto;filter:drop-shadow(0 12px 22px rgba(31,87,56,.25))}
+.popup-emoji{width:96px;height:96px;border-radius:50%;object-fit:cover;display:block;margin:0 auto;
+ filter:drop-shadow(0 12px 22px rgba(31,87,56,.25))}
 .popup h2{margin:16px 0 6px;font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:1.5rem;color:#1f5738}
 .popup p{margin:0;color:#6b8f7a;font-size:.92rem;line-height:1.55}
 @keyframes pop{from{transform:scale(.7);opacity:0}}
@@ -102,9 +109,20 @@ button{border:0;border-radius:16px;padding:14px;font:inherit;font-weight:800;cur
 @keyframes sway{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
 @keyframes tilt{0%,100%{transform:rotate(0)}30%{transform:rotate(-8deg) translateY(-3px)}70%{transform:rotate(8deg)}}
 @keyframes droop{0%,100%{transform:translateY(0)}50%{transform:translateY(6px) rotate(-4deg)}}
+/* ---------- done screen ---------- */
+.done-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:22px}
+.done-btn{flex:1;min-width:150px;max-width:220px;text-align:center;text-decoration:none;
+ border-radius:999px;padding:13px 18px;font-weight:800;font-size:.9rem;transition:.15s;cursor:pointer}
+.done-btn.po{background:linear-gradient(135deg,#8fbf6f,#4e8a5a);color:#fff;
+ box-shadow:0 16px 32px rgba(78,138,90,.30)}
+.done-btn.ig{background:transparent;border:1.5px solid #cfe6c6;color:#4e8a5a}
+.done-btn:hover{transform:translateY(-2px);border-color:#7fb069}
 .done-wrap{text-align:center;padding:16px 0}
-.done-emoji{width:110px;height:110px;object-fit:contain;display:block;margin:0 auto 10px;
- animation:floaty 3s ease-in-out infinite;filter:drop-shadow(0 12px 22px rgba(31,87,56,.25))}
+.done-logo{width:110px;height:110px;border-radius:50%;object-fit:cover;display:block;margin:0 auto 12px;
+ animation:floaty 3s ease-in-out infinite;filter:drop-shadow(0 12px 22px rgba(31,87,56,.25));
+ border:4px solid #ffffff;box-shadow:0 18px 36px rgba(31,87,56,.3)}
+.done-title{font-family:'Fraunces',Georgia,serif;font-style:italic;font-weight:600;
+ font-size:1.4rem;color:#1f5738;margin:0 0 6px}
 </style>
 </head>
 <body>
@@ -113,7 +131,11 @@ button{border:0;border-radius:16px;padding:14px;font:inherit;font-weight:800;cur
 
 <main class="card">
   <section class="view active" id="view-review">
-    <span class="badge">🍵 Mood Matcha Manggo</span>
+    <div class="brand-head">
+      <img class="brand-logo" src="logomatcho.png" alt="Mood Matcha Manggo"
+           onerror="this.onerror=null;this.src='https://emojicdn.elk.sh/🍵?style=apple';">
+      <h1 class="brand-name">Mood Matcha Manggo</h1>
+    </div>
     <h1 id="stepTitle">Terima Kasih Sudah Mencoba!! Gimana Rasanya?</h1>
     <p class="sub" id="stepSub">Pilih emoji yang paling cocok sama kamu!</p>
 
@@ -158,7 +180,7 @@ button{border:0;border-radius:16px;padding:14px;font:inherit;font-weight:800;cur
 
     <div class="step" id="step5">
       <textarea id="saran" rows="4" placeholder="Tulis saran atau kritik kamu di sini..."></textarea>
-      <p class="hint" id="saranHint">Isi saran dulu ya, atau tekan Lewati 🙏</p>
+      <p class="hint" id="saranHint">Isi saran dulu ya, atau tekan Lewati</p>
       <div class="row">
         <button type="button" class="ghost" id="skipBtn">Lewati</button>
         <button type="button" class="primary" id="nextBtn">Lanjut</button>
@@ -167,16 +189,21 @@ button{border:0;border-radius:16px;padding:14px;font:inherit;font-weight:800;cur
 
     <div class="step" id="step6">
       <input id="nama" placeholder="Nama kamu" autocomplete="name">
-      <p class="hint" id="nameHint">Isi nama dulu ya 🙏</p>
-      <button type="button" class="primary" id="submitBtn">Kirim ulasan 🍵</button>
+      <p class="hint" id="nameHint">Isi nama dulu ya</p>
+      <button type="button" class="primary" id="submitBtn">Kirim ulasan</button>
     </div>
   </section>
 
   <section class="view" id="view-done">
     <div class="done-wrap">
-      <img class="done-emoji" id="doneEmoji" src="https://emojicdn.elk.sh/🍵?style=apple" alt="">
-      <h1>Makasih banyak ya!</h1>
-      <p class="sub">Ulasan kamu udah masuk dan bikin kami makin semangat bikin matcha yang enak.<br>Sampai jumpa di jualan berikutnya! 🍵✨</p>
+      <img class="done-logo" id="doneEmoji" src="logomatcho.png" alt=""
+           onerror="this.onerror=null;this.src='https://emojicdn.elk.sh/🍵?style=apple';">
+      <h1 class="done-title">Makasih banyak ya!</h1>
+      <p class="sub">Ulasan kamu udah masuk dan bikin kami makin semangat bikin matcha yang enak.<br>Sampai jumpa di jualan berikutnya!</p>
+      <div class="done-actions" id="doneActions">
+        <a class="done-btn po" href="toko.html">Pesan Pre-Order</a>
+        <a class="done-btn ig" id="igBtn" href="#" target="_blank" rel="noopener">Instagram Kami</a>
+      </div>
     </div>
   </section>
 </main>
@@ -186,7 +213,8 @@ button{border:0;border-radius:16px;padding:14px;font:inherit;font-weight:800;cur
     <img class="spark s1" alt="">
     <img class="spark s2" alt="">
     <img class="apology" alt="">
-    <img class="popup-emoji" id="popupEmoji" src="https://emojicdn.elk.sh/🍵?style=apple" alt="">
+    <img class="popup-emoji" id="popupEmoji" src="logomatcho.png" alt=""
+         onerror="this.onerror=null;this.src='https://emojicdn.elk.sh/🍵?style=apple';">
     <h2 id="popupTitle"></h2>
     <p id="popupText"></p>
   </div>
@@ -196,8 +224,10 @@ button{border:0;border-radius:16px;padding:14px;font:inherit;font-weight:800;cur
 document.addEventListener('DOMContentLoaded', function () {
 
   var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzZCkexN9UMUawiCORCthcZrlTNRmSx6ViGeFq2RUuEDG2EArQap-kUC4yvKbFffnoW/exec';
+  var IG_URL = 'https://www.instagram.com/USERNAME_KALIAN'; // ⚠️ GANTI USERNAME_KALIAN DENGAN LINK IG KALIAN
 
   var state = { emosi:'', char:'', rasa:'', harga:'', beli:'', saran:'', nama:'' };
+  var LOGO = 'logomatcho.png';
   var MOODS = {
     bahagia_banget: { title:'HOREEE!!', text:'Semangat kamu nular banget, makasih ya!', deco:'spark' },
     bahagia:        { title:'Hihi, sukaa!', text:'Senyum kamu jadi semangat kami hari ini', deco:'spark' },
@@ -212,6 +242,9 @@ document.addEventListener('DOMContentLoaded', function () {
     5: ['Ada saran atau kritik?', 'Masukan kamu sangat berharga untuk kami.'],
     6: ['Masukkan Nama kamu Yaa', 'Senang mengenalmu!']
   };
+
+  /* set IG link */
+  document.getElementById('igBtn').href = IG_URL;
 
   function $(id){ return document.getElementById(id); }
   function shakeEl(el){ el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); }
@@ -282,13 +315,13 @@ document.addEventListener('DOMContentLoaded', function () {
   $('skipBtn').addEventListener('click', function(){ state.saran = ''; goStep(6); });
   $('nextBtn').addEventListener('click', function(){
     var val = $('saran').value.trim();
-    if (!val) { shakeEl($('saran')); hint('saranHint', 'Isi saran dulu ya, atau tekan Lewati 🙏'); return; }
+    if (!val) { shakeEl($('saran')); hint('saranHint', 'Isi saran dulu ya, atau tekan Lewati'); return; }
     state.saran = val; goStep(6);
   });
 
   $('submitBtn').addEventListener('click', function(){
     var nama = $('nama').value.trim();
-    if (!nama) { shakeEl($('nama')); hint('nameHint', 'Isi nama dulu ya 🙏'); return; }
+    if (!nama) { shakeEl($('nama')); hint('nameHint', 'Isi nama dulu ya'); return; }
     state.nama = nama;
     var btn = $('submitBtn');
     btn.disabled = true; btn.innerText = 'Mengirim...';
@@ -304,21 +337,24 @@ document.addEventListener('DOMContentLoaded', function () {
     fetch(SCRIPT_URL, { method:'POST', body:body })
       .then(function(r){ return r.json(); })
       .then(function(res){
-        btn.disabled = false; btn.innerText = 'Kirim ulasan 🍵';
+        btn.disabled = false; btn.innerText = 'Kirim ulasan';
         if (res.status === 'success') {
           showOverlay(state.char, 'anim-' + state.emosi, 'Makasih ya, ' + state.nama + '!',
-            'Semoga harimu seenak matcha ini 🍵✨', 2600, function(){
-              $('doneEmoji').src = 'https://emojicdn.elk.sh/' + encodeURIComponent(state.char || '🍵') + '?style=apple';
-              resetReview(); showView('done');
+            'Semoga harimu seenak matcha ini', 2600, function(){
+              var de = $('doneEmoji');
+              de.src = 'https://emojicdn.elk.sh/' + encodeURIComponent(state.char || '🍵') + '?style=apple';
+              de.onerror = function(){ this.src = LOGO; };
+              resetReview();
+              showView('done');
             }, 'spark');
         } else {
-          hint('nameHint', '❌ Server bilang: ' + (res.message || 'gagal simpan'));
+          hint('nameHint', 'Server bilang: ' + (res.message || 'gagal simpan'));
           shakeEl($('nama'));
         }
       })
       .catch(function(){
-        btn.disabled = false; btn.innerText = 'Kirim ulasan 🍵';
-        hint('nameHint', '❌ Gagal mengirim, cek koneksi lalu coba lagi.');
+        btn.disabled = false; btn.innerText = 'Kirim ulasan';
+        hint('nameHint', 'Gagal mengirim, cek koneksi lalu coba lagi.');
       });
   });
 
@@ -329,6 +365,8 @@ document.addEventListener('DOMContentLoaded', function () {
     $('bubbles').classList.remove('picked');
     document.querySelectorAll('.bubble').forEach(function(b){ b.classList.remove('selected'); });
     document.querySelectorAll('.yn-btn').forEach(function(b){ b.classList.remove('selected'); b.disabled = false; });
+    $('popupEmoji').src = LOGO;
+    $('popupEmoji').className = 'popup-emoji';
     goStep(1);
   }
 });
