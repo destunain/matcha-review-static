@@ -153,7 +153,7 @@ button{border:0;border-radius:20px;padding:15px;font:inherit;font-weight:900;cur
       <h1 class="brand-name">Mood Matcha Manggo</h1>
     </div>
     <div class="dots" id="dots"><span></span><span></span><span></span><span></span><span></span></div>
-    <h1 id="stepTitle">Terima Kasih Sudah Mencoba! Bagimana Rasanya?</h1>
+    <h1 id="stepTitle">Terima Kasih Sudah Mencoba! Bagaimana Rasanya?</h1>
     <p class="sub" id="stepSub">Pilih emoji yang paling cocok sama kamu!</p>
 
     <div class="step active" id="step1">
@@ -167,11 +167,11 @@ button{border:0;border-radius:20px;padding:15px;font:inherit;font-weight:900;cur
 
     <div class="step" id="step2">
       <div class="bubbles" id="bubbles">
+        <button type="button" class="bubble" data-rasa="Enak">Enak</button>
+        <button type="button" class="bubble" data-rasa="Terlalu Manis">Terlalu Manis</button>
         <button type="button" class="bubble" data-rasa="Pas">Pas</button>
-        <button type="button" class="bubble" data-rasa="Terlalu manis">Terlalu manis</button>
-        <button type="button" class="bubble" data-rasa="Hambar">Agak hambar</button>
-        <button type="button" class="bubble" data-rasa="Terlalu enak">Terlalu enak</button>
-        <button type="button" class="bubble" data-rasa="Kurang matcha">Kurang matcha</button>
+        <button type="button" class="bubble" data-rasa="Kurang Matcha">Matchanya Kurang Kuat</button>
+        <button type="button" class="bubble" data-rasa="Hambar">Hambar</button>
       </div>
     </div>
 
@@ -186,7 +186,7 @@ button{border:0;border-radius:20px;padding:15px;font:inherit;font-weight:900;cur
     </div>
 
     <div class="step" id="step4">
-      <textarea id="saran" rows="4" placeholder="Contoh: harganya pas di kantong, terlalu manis, kemasan jelek, dsb."></textarea>
+      <textarea id="saran" rows="4" placeholder="Contoh: Harganya terlalu mahal, Rasanya terlalu biasa, Cara mengonsumsinya susah, dsb."></textarea>
       <p class="hint" id="saranHint">Isi saran dulu ya, atau tekan Lewati</p>
       <div class="row">
         <button type="button" class="ghost" id="skipBtn">Lewati</button>
@@ -206,7 +206,7 @@ button{border:0;border-radius:20px;padding:15px;font:inherit;font-weight:900;cur
       <img class="done-logo" id="doneEmoji" src="logomatcho.png" alt=""
            onerror="this.onerror=null;this.src='https://emojicdn.elk.sh/🍵?style=apple';">
       <h1 class="done-title">Makasih banyak ya!</h1>
-      <p class="sub">Ulasan kamu sudah masuk dan buat kami semakin semangat bikin Matcho yang enak.<br>Sampai Jumpa!!</p>
+      <p class="sub">Ulasan kamu sudah masuk dan buat kami semakin semangat.<br>Sampai Jumpa!</p>
       <div class="done-actions">
         <a class="done-btn po" href="toko.html">Pesan Pre-Order</a>
         <a class="done-btn ig" id="igBtn" href="#" target="_blank" rel="noopener">Instagram Kami</a>
@@ -231,7 +231,7 @@ button{border:0;border-radius:20px;padding:15px;font:inherit;font-weight:900;cur
 document.addEventListener('DOMContentLoaded', function () {
 
   var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzZCkexN9UMUawiCORCthcZrlTNRmSx6ViGeFq2RUuEDG2EArQap-kUC4yvKbFffnoW/exec';
-  var IG_URL = 'https://www.instagram.com/moodmatcho';   // ⚠️ GANTI DENGAN LINK IG KALIAN
+  var IG_URL = 'https://www.instagram.com/USERNAME_KALIAN';   // ⚠️ GANTI DENGAN LINK IG KALIAN
   var LOGO = 'logomatcho.png';
 
   try { localStorage.removeItem('mm_reviewed'); } catch (e) {}
@@ -245,10 +245,10 @@ document.addEventListener('DOMContentLoaded', function () {
   };
   var TITLES = {
     1: ['Terima Kasih Sudah Mencoba! Bagaimana Rasanya?', 'Pilih emoji yang paling cocok sama kamu!'],
-    2: ['Gimana Rasanya?', 'Ketuk bubble yang paling sesuai sama rasanya yaa..'],
-    3: ['Berikan Jawabanmu!', 'Terima kasih atas kesempatannya!.'],
-    4: ['Ada saran atau kritik?', 'Masukan kamu sangat berharga untuk kami.'],
-    5: ['Isi Nama kamu Yaa', 'Senang bisa mengenalmu!']
+    2: ['Gimana Rasanya?', 'Ketuk bubble yang paling sesuai sama apa yang kamu rasa ya!'],
+    3: ['Apakah Kamu Bersedia?', 'Terima Kasih atas kesempatannya.'],
+    4: ['Ada Saran atau Kritik?', 'Masukkan kamu sangat berharga untuk kami!.'],
+    5: ['Isi Nama kamu Yaa', 'Senang mengenalmu!']
   };
 
   function $(id){ return document.getElementById(id); }
