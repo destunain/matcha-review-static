@@ -186,7 +186,7 @@ button{border:0;border-radius:14px;padding:14px;font:inherit;font-weight:800;cur
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-  var SCRIPT_URL ='https://script.google.com/macros/s/AKfycbweX6yPg9iOERBwG4y_a-u_q_uXXBpsEzrvqoeQ8UL6kxpXoicbQv31soiFRFitGD_3/exec';
+  var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbweX6yPg9iOERBwG4y_a-u_q_uXXBpsEzrvqoeQ8UL6kxpXoicbQv31soiFRFitGD_3/exec';
 
   var lastStatus = null;
   var lastPO = null;
@@ -196,6 +196,21 @@ document.addEventListener('DOMContentLoaded', function () {
   function log(m){ console.log('[toko]', m); }
   function rupiah(n){ return 'Rp' + Number(n).toLocaleString('id-ID'); }
   function esc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  /* pembersih teks tanggal: buang sampah GMT/1899, jadi "5 November 2026, pukul 10:00 - 12:30" */
+  function rapikanStr(s){
+    var str = String(s == null ? '' : s);
+    if (!str) return str;
+    if (str.indexOf('GMT') === -1 && str.indexOf('1899') === -1) return str;
+    var dm = str.match(/(\d{1,2}\s+[A-Za-z]+\s+\d{4})/);
+    var datePart = dm ? dm[1] : str.split(',')[0];
+    var times = [];
+    var re = /(\d{1,2}:\d{2}):\d{2}/g, m;
+    while ((m = re.exec(str)) !== null) times.push(m[1]);
+    var out = datePart;
+    if (times.length >= 2) out += ', pukul ' + times[0] + ' - ' + times[1];
+    else if (times.length === 1) out += ', pukul ' + times[0];
+    return out;
+  }
   function shakeEl(el){ el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); }
   function hint(id, msg){ var h = $(id); h.textContent = msg; h.style.display = 'block'; }
   function hideHint(id){ $(id).style.display = 'none'; }
@@ -215,21 +230,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
   function fetchJson(url, ms){
     var c = new AbortController();
-    var t = setTimeout(function(){ c.abort(); }, ms || 12000);
+    var t = setTimeout(function(){ c.abort(); }, ms || 20000);
     return fetch(url, { signal: c.signal })
       .then(function(r){ clearTimeout(t); return r.json(); });
   }
 
-  log('SCRIPT_URL = ' + SCRIPT_URL);
-  fetchJson(SCRIPT_URL + '?action=ping')
-    .then(function(j){ log('PING ok → ' + j.v + ' | sheet: ' + j.sheet); })
-    .catch(function(err){ log('PING GAGAL: ' + err.message); });
-
-  function loadStatus(retry){
+  function loadStatus(){
     fetchJson(SCRIPT_URL + '?action=status')
       .then(function(st){ lastStatus = st; log('STATUS → po=' + st.po + ' stok=' + st.stok); renderAll(st); })
       .catch(function(err){
-        if (!retry) { setTimeout(function(){ loadStatus(true); }, 1500); return; }
         log('STATUS GAGAL: ' + err.message);
         setPoButton('closed', 'Pre-Order Ditutup');
         $('poDeadline').textContent = 'Jadwal gagal dimuat. Refresh lagi ya.';
@@ -238,45 +247,45 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function renderAll(st){
-  if (st.harga_aktif) {
-    $('priceAktif').textContent = rupiah(st.harga_aktif);
-    if (st.harga_coret) {
-      $('priceCoret').textContent = rupiah(st.harga_coret);
-      $('priceCoret').style.display = 'inline-block';
-      $('priceNote').textContent = 'Harga Promo!';
+    if (st.harga_aktif) {
+      $('priceAktif').textContent = rupiah(st.harga_aktif);
+      if (st.harga_coret) {
+        $('priceCoret').textContent = rupiah(st.harga_coret);
+        $('priceCoret').style.display = 'inline-block';
+        $('priceNote').textContent = 'Harga Promo!';
+      } else {
+        $('priceCoret').style.display = 'none';
+        $('priceNote').textContent = 'Harga per botol';
+      }
     } else {
+      $('priceAktif').textContent = 'Rp—';
       $('priceCoret').style.display = 'none';
-      $('priceNote').textContent = 'Harga per botol';
+      $('priceNote').textContent = 'Harga segera diumumkan';
     }
-  } else {
-    $('priceAktif').textContent = 'Rp—';
-    $('priceCoret').style.display = 'none';
-    $('priceNote').textContent = 'Harga segera diumumkan';
+    var pill = $('stockPill2');
+    pill.textContent = st.stok > 0 ? (st.stok + ' botol') : 'Habis';
+    pill.classList.toggle('habis', st.stok <= 0);
+    var submit = $('poSubmit');
+    submit.classList.remove('closed', 'soon');
+    if (st.po === 'OPEN') {
+      setPoButton('open', 'Pesan Pre-Order');
+      submit.disabled = false;
+      $('poDeadline').textContent = 'PO dibuka sampai ' + rapikanStr(st.tutup_str);
+      $('ambilNote').textContent = 'Pesanan diserahkan pada hari jualan: ' + rapikanStr(st.jualan_str) + '.';
+    } else if (st.po === 'BEFORE') {
+      setPoButton('soon', 'Pre-Order Belum Dibuka');
+      submit.disabled = true; submit.classList.add('closed');
+      $('poDeadline').textContent = 'PO berikutnya dibuka ' + rapikanStr(st.buka_str);
+      $('ambilNote').textContent = 'Silakan kembali saat PO sudah dibuka.';
+    } else {
+      setPoButton('closed', 'Pre-Order Ditutup');
+      submit.disabled = true; submit.classList.add('closed');
+      if (st.po === 'SOLDOUT') $('poDeadline').textContent = 'Stok periode ini habis. Sampai jumpa di jualan berikutnya.';
+      else if (st.po === 'NO_SCHEDULE') $('poDeadline').textContent = 'Jadwal PO segera diumumkan.';
+      else $('poDeadline').textContent = st.pesan_tutup || 'PO periode ini sudah ditutup.';
+      $('ambilNote').textContent = 'Silakan kembali saat PO dibuka.';
+    }
   }
-  var pill = $('stockPill2');
-  pill.textContent = st.stok > 0 ? (st.stok + ' botol') : 'Habis';
-  pill.classList.toggle('habis', st.stok <= 0);
-  var submit = $('poSubmit');
-  submit.classList.remove('closed', 'soon');
-  if (st.po === 'OPEN') {
-    setPoButton('open', 'Pesan Pre-Order');
-    submit.disabled = false;
-    $('poDeadline').textContent = 'PO dibuka sampai ' + st.tutup_str;
-    $('ambilNote').textContent = 'Pesanan diserahkan pada hari jualan: ' + st.jualan_str + '.';
-  } else if (st.po === 'BEFORE') {
-    setPoButton('soon', 'Pre-Order Belum Dibuka');
-    submit.disabled = true; submit.classList.add('closed');
-    $('poDeadline').textContent = 'PO dibuka ' + st.buka_str + ' sampai ' + st.tutup_str;
-    $('ambilNote').textContent = 'Silakan kembali saat PO sudah dibuka.';
-  } else {
-    setPoButton('closed', 'Pre-Order Ditutup');
-    submit.disabled = true; submit.classList.add('closed');
-    if (st.po === 'SOLDOUT') $('poDeadline').textContent = 'Stok periode ini habis. Sampai jumpa di jualan berikutnya.';
-    else if (st.po === 'NO_SCHEDULE') $('poDeadline').textContent = 'Jadwal PO segera diumumkan.';
-    else $('poDeadline').textContent = st.pesan_tutup || 'PO periode ini sudah ditutup.';
-    $('ambilNote').textContent = 'Silakan kembali saat PO dibuka.';
-  }
-}
 
   function refreshHome(){
     loadStatus();
@@ -386,7 +395,7 @@ document.addEventListener('DOMContentLoaded', function () {
       '<div class="r"><span>Subtotal</span><span>' + rupiah(po.subtotal) + '</span></div>' +
       '<div class="r"><span>Biaya admin</span><span>' + rupiah(1000) + '</span></div>' +
       '<div class="r tot"><span>TOTAL</span><span>' + rupiah(po.total) + '</span></div><hr>' +
-      '<div class="r"><span>Diambil</span><span>' + esc(po.jualan) + '</span></div>' +
+      '<div class="r"><span>Diambil</span><span>' + esc(rapikanStr(po.jualan)) + '</span></div>' +
       '<div class="r"><span>Titik temu</span><span style="text-align:right">' + esc(po.alamat) + '</span></div>';
     try {
       localStorage.setItem('mm_last_kode', po.kode);
@@ -443,7 +452,7 @@ document.addEventListener('DOMContentLoaded', function () {
       '<div class="r"><span>Nama</span><span>' + esc(row.nama) + '</span></div>' +
       '<div class="r"><span>Jumlah</span><span>' + row.jumlah + ' botol</span></div>' +
       '<div class="r"><span>Total</span><span>' + rupiah(row.total) + '</span></div>' +
-      '<div class="r"><span>Diambil</span><span>' + esc(row.tanggal_ambil) + '</span></div>' +
+      '<div class="r"><span>Diambil</span><span>' + esc(rapikanStr(row.tanggal_ambil)) + '</span></div>' +
       '<div class="r"><span>Titik temu</span><span style="text-align:right">' + esc(row.titik_temu || '-') + '</span></div>' +
       '<div class="aksi">' + l[2] + '</div>' + aksiBtn;
     box.querySelectorAll('[data-wa]').forEach(function(b){
