@@ -227,7 +227,9 @@ document.addEventListener('DOMContentLoaded', function () {
   var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbzZCkexN9UMUawiCORCthcZrlTNRmSx6ViGeFq2RUuEDG2EArQap-kUC4yvKbFffnoW/exec';
   var IG_URL = 'https://www.instagram.com/USERNAME_KALIAN';   // ⚠️ GANTI DENGAN LINK IG KALIAN
   var LOGO = 'logomatcho.png';
-  var FLAG = 'mm_reviewed';
+
+  /* bersihin flag lama yang bikin QR langsung done (kalau masih nyangkut di browser ini) */
+  try { localStorage.removeItem('mm_reviewed'); } catch (e) {}
 
   var state = { emosi:'', char:'', rasa:'', harga:'', beli:'', saran:'', nama:'' };
   var MOODS = {
@@ -249,8 +251,6 @@ document.addEventListener('DOMContentLoaded', function () {
   function shakeEl(el){ el.classList.remove('shake'); void el.offsetWidth; el.classList.add('shake'); }
   function hint(id, msg){ var h = $(id); h.textContent = msg; h.style.display = 'block'; }
   function hideHint(id){ $(id).style.display = 'none'; }
-  function sudahUlasan(){ try { return localStorage.getItem(FLAG) === '1'; } catch (e) { return false; } }
-  function tandaiUlasan(){ try { localStorage.setItem(FLAG, '1'); } catch (e) {} }
   function showView(v){
     document.querySelectorAll('.view').forEach(function(x){ x.classList.remove('active'); });
     $('view-' + v).classList.add('active');
@@ -343,7 +343,6 @@ document.addEventListener('DOMContentLoaded', function () {
       .then(function(res){
         btn.disabled = false; btn.innerText = 'Kirim ulasan';
         if (res.status === 'success') {
-          tandaiUlasan();
           showOverlay(state.char, 'anim-' + state.emosi, 'Makasih ya, ' + state.nama + '!',
             'Semoga harimu seenak matcha ini', 2600, function(){
               var de = $('doneEmoji');
@@ -373,7 +372,8 @@ document.addEventListener('DOMContentLoaded', function () {
     goStep(1);
   }
 
-  if (sudahUlasan()) showView('done');
+  /* SELALU mulai dari wizard, tanpa flag apapun */
+  /* showView('review') sudah active dari HTML default */
 });
 </script>
 </body>

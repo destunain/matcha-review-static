@@ -186,7 +186,7 @@ button{border:0;border-radius:14px;padding:14px;font:inherit;font-weight:800;cur
 <script>
 document.addEventListener('DOMContentLoaded', function () {
 
-  var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwvkB6mimLWIhYcMK2_KDIKgo7UOREVLzD3HHcwOSpYlEUr_emeHwcAwqmoy-1mgt_C/exec';
+  var SCRIPT_URL ='https://script.google.com/macros/s/AKfycbweX6yPg9iOERBwG4y_a-u_q_uXXBpsEzrvqoeQ8UL6kxpXoicbQv31soiFRFitGD_3/exec';
 
   var lastStatus = null;
   var lastPO = null;
@@ -238,45 +238,45 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function renderAll(st){
-    if (st.harga_aktif) {
-      $('priceAktif').textContent = rupiah(st.harga_aktif);
-      if (st.harga_coret) {
-        $('priceCoret').textContent = rupiah(st.harga_coret);
-        $('priceCoret').style.display = 'inline-block';
-        $('priceNote').textContent = 'Harga Promo!';
-      } else {
-        $('priceCoret').style.display = 'none';
-        $('priceNote').textContent = 'Harga per botol';
-      }
+  if (st.harga_aktif) {
+    $('priceAktif').textContent = rupiah(st.harga_aktif);
+    if (st.harga_coret) {
+      $('priceCoret').textContent = rupiah(st.harga_coret);
+      $('priceCoret').style.display = 'inline-block';
+      $('priceNote').textContent = 'Harga Promo!';
     } else {
-      $('priceAktif').textContent = 'Rp—';
       $('priceCoret').style.display = 'none';
-      $('priceNote').textContent = 'Harga segera diumumkan';
+      $('priceNote').textContent = 'Harga per botol';
     }
-    var pill = $('stockPill2');
-    pill.textContent = st.stok > 0 ? (st.stok + ' botol') : 'Habis';
-    pill.classList.toggle('habis', st.stok <= 0);
-    var submit = $('poSubmit');
-    submit.classList.remove('closed', 'soon');
-    if (st.po === 'OPEN') {
-      setPoButton('open', 'Pesan Pre-Order');
-      submit.disabled = false;
-      $('poDeadline').textContent = 'PO dibuka sampai ' + st.tutup_str;
-      $('ambilNote').textContent = 'Pesanan diserahkan pada hari produktif jualan: ' + st.jualan_str + '.';
-    } else if (st.po === 'BEFORE') {
-      setPoButton('soon', 'Pre-Order Belum Dibuka');
-      submit.disabled = true; submit.classList.add('closed');
-      $('poDeadline').textContent = 'PO berikutnya dibuka ' + st.buka_str;
-      $('ambilNote').textContent = 'Silakan kembali saat PO sudah dibuka.';
-    } else {
-      setPoButton('closed', 'Pre-Order Ditutup');
-      submit.disabled = true; submit.classList.add('closed');
-      if (st.po === 'SOLDOUT') $('poDeadline').textContent = 'Stok periode ini habis. Sampai jumpa di jualan berikutnya.';
-      else if (st.po === 'NO_SCHEDULE') $('poDeadline').textContent = 'Jadwal PO segera diumumkan.';
-      else $('poDeadline').textContent = st.pesan_tutup || 'PO periode ini sudah ditutup.';
-      $('ambilNote').textContent = 'Silakan kembali saat PO dibuka.';
-    }
+  } else {
+    $('priceAktif').textContent = 'Rp—';
+    $('priceCoret').style.display = 'none';
+    $('priceNote').textContent = 'Harga segera diumumkan';
   }
+  var pill = $('stockPill2');
+  pill.textContent = st.stok > 0 ? (st.stok + ' botol') : 'Habis';
+  pill.classList.toggle('habis', st.stok <= 0);
+  var submit = $('poSubmit');
+  submit.classList.remove('closed', 'soon');
+  if (st.po === 'OPEN') {
+    setPoButton('open', 'Pesan Pre-Order');
+    submit.disabled = false;
+    $('poDeadline').textContent = 'PO dibuka sampai ' + st.tutup_str;
+    $('ambilNote').textContent = 'Pesanan diserahkan pada hari jualan: ' + st.jualan_str + '.';
+  } else if (st.po === 'BEFORE') {
+    setPoButton('soon', 'Pre-Order Belum Dibuka');
+    submit.disabled = true; submit.classList.add('closed');
+    $('poDeadline').textContent = 'PO dibuka ' + st.buka_str + ' sampai ' + st.tutup_str;
+    $('ambilNote').textContent = 'Silakan kembali saat PO sudah dibuka.';
+  } else {
+    setPoButton('closed', 'Pre-Order Ditutup');
+    submit.disabled = true; submit.classList.add('closed');
+    if (st.po === 'SOLDOUT') $('poDeadline').textContent = 'Stok periode ini habis. Sampai jumpa di jualan berikutnya.';
+    else if (st.po === 'NO_SCHEDULE') $('poDeadline').textContent = 'Jadwal PO segera diumumkan.';
+    else $('poDeadline').textContent = st.pesan_tutup || 'PO periode ini sudah ditutup.';
+    $('ambilNote').textContent = 'Silakan kembali saat PO dibuka.';
+  }
+}
 
   function refreshHome(){
     loadStatus();
