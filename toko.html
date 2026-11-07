@@ -83,7 +83,6 @@ button{border:0;border-radius:14px;padding:14px;font:inherit;font-weight:800;cur
 .list-item{width:100%;margin-top:10px;background:#fff9ec;border:1.5px solid #e8c795;border-radius:12px;
  padding:12px;text-align:left;font-size:.85rem;color:#5b3210;font-weight:700}
 .list-item:hover{border-color:#e2762a}
-/* popup overlay */
 .overlay{position:fixed;inset:0;display:none;align-items:center;justify-content:center;
  background:rgba(20,10,4,.66);backdrop-filter:blur(8px);z-index:50;padding:24px}
 .overlay.show{display:flex}
@@ -95,6 +94,16 @@ button{border:0;border-radius:14px;padding:14px;font:inherit;font-weight:800;cur
 .popup p{margin:0 0 14px;color:#9a7a55;font-size:.88rem;line-height:1.6;font-weight:600}
 @keyframes pop{from{transform:scale(.7);opacity:0}}
 .receipt-note{text-align:center;font-size:.82rem;color:#9a7a55;line-height:1.5;margin-bottom:14px}
+/* skeleton: pakai class sk biar gak nabrak class garis .line */
+.skeleton{background:linear-gradient(90deg,#f0e6d5 25%,#f7efe3 50%,#f0e6d5 75%);
+ background-size:200% 100%;animation:shimmer 1.5s infinite;border-radius:8px;color:transparent!important}
+.skeleton *{visibility:hidden}
+.skeleton.sk{height:14px;margin:8px 0}
+.skeleton.sk.wide{width:100%}
+.skeleton.sk.medium{width:60%}
+.skeleton.sk.short{width:40%}
+.skeleton.box{height:40px;border-radius:12px}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
 </style>
 </head>
 <body>
@@ -103,27 +112,26 @@ button{border:0;border-radius:14px;padding:14px;font:inherit;font-weight:800;cur
 
 <main class="card" id="mainCard">
 
-  <!-- ============ LAYAR PO (default) ============ -->
   <section class="view active" id="view-po">
     <h1 class="script-title">Pre Order</h1>
-    <p class="po-deadline" id="poDeadline">Memuat jadwal...</p>
+    <p class="po-deadline skeleton sk wide" id="poDeadline">&nbsp;</p>
     <hr class="line">
     <div class="po-info">
       <div class="po-info-left">
         <div class="po-name">Mood Matcho</div>
         <div class="po-price">
-          <span class="price-aktif" id="priceAktif">Rp—</span>
+          <span class="price-aktif skeleton sk short" id="priceAktif">&nbsp;</span>
           <span class="strike" id="priceCoret" style="display:none"></span>
         </div>
-        <div class="po-price-note" id="priceNote"></div>
+        <div class="po-price-note skeleton sk short" id="priceNote">&nbsp;</div>
       </div>
       <div class="po-info-right">
         <div class="po-name">Stok</div>
-        <span class="stock-badge" id="stockPill2">—</span>
+        <span class="stock-badge skeleton box" id="stockPill2">&nbsp;</span>
       </div>
     </div>
     <hr class="line">
-    <p class="po-note" id="ambilNote"></p>
+    <p class="po-note skeleton sk wide" id="ambilNote">&nbsp;</p>
     <input id="poNama" placeholder="Nama lengkap" autocomplete="name">
     <p class="hint" id="poNamaHint"></p>
     <input id="poHp" placeholder="Nomor HP (08xx)" inputmode="numeric">
@@ -137,7 +145,6 @@ button{border:0;border-radius:14px;padding:14px;font:inherit;font-weight:800;cur
     <button type="button" class="ghost slim" id="trackBtn0">Cek Status Pesanan</button>
   </section>
 
-  <!-- ============ STRUK ============ -->
   <section class="view" id="view-receipt">
     <h1 class="script-title">Pesanan Tercatat</h1>
     <div class="struk" id="strukBox"></div>
@@ -149,7 +156,6 @@ button{border:0;border-radius:14px;padding:14px;font:inherit;font-weight:800;cur
     </div>
   </section>
 
-  <!-- ============ CEK STATUS ============ -->
   <section class="view" id="view-track">
     <h1 class="script-title">Lacak Pesanan</h1>
     <p class="sub" style="text-align:center">Pakai kode PO atau nomor HP.</p>
@@ -225,7 +231,9 @@ document.addEventListener('DOMContentLoaded', function () {
       .then(function(st){ lastStatus = st; log('STATUS → po=' + st.po + ' stok=' + st.stok); renderAll(st); })
       .catch(function(err){
         log('STATUS GAGAL: ' + err.message);
-        $('poDeadline').textContent = 'Jadwal gagal dimuat. Refresh lagi ya.';
+        var d = $('poDeadline');
+        d.classList.remove('skeleton','sk','wide');
+        d.textContent = 'Jadwal gagal dimuat. Refresh lagi ya.';
         $('poSubmit').disabled = true;
         $('poSubmit').classList.add('closed');
       });
@@ -239,6 +247,9 @@ document.addEventListener('DOMContentLoaded', function () {
   }
 
   function renderAll(st){
+    /* hapus skeleton */
+    document.querySelectorAll('.skeleton').forEach(function(el){ el.classList.remove('skeleton','sk','wide','medium','short','box'); });
+
     /* harga */
     if (st.harga_aktif) {
       $('priceAktif').textContent = rupiah(st.harga_aktif);
@@ -360,7 +371,7 @@ document.addEventListener('DOMContentLoaded', function () {
           }
           var harga = lastStatus.harga_aktif;
           lastPO = { kode: reply.kode, nama:nama, hp:hp, jumlah:jumlah, harga:harga,
-                     subtotal: jumlah * harga, total: reply.total, alamat:alamat,
+                     subtotal: jumlah * harga, admin: lastStatus.admin || 0, total: reply.total, alamat:alamat,
                      jualan: lastStatus.jualan_str, wa: lastStatus.wa };
           renderStruk(lastPO);
           showView('receipt');
@@ -380,7 +391,7 @@ document.addEventListener('DOMContentLoaded', function () {
       '<div class="r"><span>Jumlah</span><span>' + po.jumlah + ' botol</span></div>' +
       '<div class="r"><span>Harga</span><span>' + rupiah(po.harga) + ' x ' + po.jumlah + '</span></div>' +
       '<div class="r"><span>Subtotal</span><span>' + rupiah(po.subtotal) + '</span></div>' +
-      '<div class="r"><span>Biaya admin</span><span>' + rupiah(1000) + '</span></div>' +
+      '<div class="r"><span>Biaya admin</span><span>' + rupiah(po.admin) + '</span></div>' +
       '<div class="r tot"><span>TOTAL</span><span>' + rupiah(po.total) + '</span></div><hr>' +
       '<div class="r"><span>Ambil</span><span>' + esc(rapikanStr(po.jualan)) + '</span></div>' +
       '<div class="r"><span>Titik temu</span><span style="text-align:right">' + esc(po.alamat) + '</span></div>';
