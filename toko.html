@@ -341,7 +341,7 @@ document.addEventListener('DOMContentLoaded', function () {
     if (!/^08\d{8,11}$/.test(hp)) { shakeEl($('poHp')); hint('poHpHint', 'Nomor HP tidak valid.'); ok = false; }
     if (!jumlah || jumlah < 1) { shakeEl($('poJumlah')); hint('poJumlahHint', 'Minimal 1 botol.'); ok = false; }
     else if (jumlah > lastStatus.stok) { shakeEl($('poJumlah')); hint('poJumlahHint', 'Maaf, stok tinggal ' + lastStatus.stok + ' botol.'); ok = false; }
-    if (alamat.length < 10) { shakeEl($('poAlamat')); hint('poAlamatHint', 'Tulis titik temu + alamat selengkap mungkin.'); ok = false; }
+    if (alamat.length < 10) { shakeEl($('poAlamat')); hint('poAlamatHint', 'Tulis titik temu (sekitar UNESA Ketintang) + alamat lengkap.'); ok = false; }
     if (!ok) return;
 
     var btn = $('poSubmit');
